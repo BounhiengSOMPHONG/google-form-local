@@ -1,49 +1,66 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('สร้างแบบสอบถามใหม่') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
+    <div class="min-h-screen bg-purple-50">
+        <!-- Include Survey Tools Navigation -->
+        <x-survey-tools />
+        
+        <div class="py-8">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Main Form Area -->
+                <div class="flex-1">
                     <form method="POST" action="{{ route('surveys.store') }}">
                         @csrf
-                        
-                        <div class="mb-4">
-                            <x-input-label for="title" :value="__('ชื่อแบบสอบถาม')" />
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
-                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                        <!-- Title Card -->
+                        <div class="bg-white rounded-lg shadow-sm mb-4 p-6">
+                            <input
+                                type="text"
+                                name="title"
+                                class="text-3xl font-medium w-full border-0 border-b-2 border-green-200 focus:border-green-500 focus:ring-0 p-2 mb-4"
+                                placeholder="ฟอร์มไม่มีชื่อ"
+                                value="{{ old('title') }}"
+                                required
+                                autofocus
+                            />
+                            <textarea
+                                name="description"
+                                class="w-full border-0 focus:ring-0 text-gray-600 resize-none"
+                                rows="2"
+                                placeholder="คำอธิบายแบบฟอร์ม"
+                            >{{ old('description') }}</textarea>
                         </div>
 
-                        <div class="mb-4">
-                            <x-input-label for="description" :value="__('คำอธิบาย')" />
-                            <textarea id="description" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="description" rows="3">{{ old('description') }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                        </div>
+                        <!-- Hidden Settings Input -->
+                        <input type="hidden" name="allow_multiple_responses" value="0" id="allow_multiple_responses">
+                        <input type="hidden" name="require_login" value="0" id="require_login">
 
-                        <div class="mb-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="allow_multiple_responses" value="1" {{ old('allow_multiple_responses') ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-600">{{ __('อนุญาตให้ตอบได้หลายครั้ง') }}</span>
-                            </label>
-                        </div>
 
-                        <div class="mb-4">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="require_login" value="1" {{ old('require_login') ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-600">{{ __('ต้องเข้าสู่ระบบก่อนตอบแบบสอบถาม') }}</span>
-                            </label>
-                        </div>
+                        <!-- Fixed Action Buttons -->
+                        <div class="fixed bottom-8 right-8 flex flex-col space-y-4">
+                            <!-- Save Button -->
+                            <button
+                                type="submit"
+                                class="w-12 h-12 flex items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-150"
+                                title="บันทึก"
+                            >
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </button>
 
-                        <div class="flex items-center gap-4">
-                            <x-primary-button>{{ __('บันทึก') }}</x-primary-button>
-                            <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-gray-900">{{ __('ยกเลิก') }}</a>
+                            <!-- Cancel Button -->
+                            <a 
+                                href="{{ route('dashboard') }}"
+                                class="w-12 h-12 flex items-center justify-center rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-150"
+                                title="ยกเลิก"
+                            >
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </a>
                         </div>
                     </form>
                 </div>
+
+
             </div>
         </div>
     </div>
