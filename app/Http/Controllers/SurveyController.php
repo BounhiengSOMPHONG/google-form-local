@@ -42,7 +42,7 @@ class SurveyController extends Controller
         $survey = Survey::create($validated);
 
         return redirect()->route('dashboard')
-            ->with('status', 'แบบสอบถามถูกสร้างเรียบร้อยแล้ว');
+            ->with('status', 'Survey was created successfully.');
     }
 
     /**
@@ -79,7 +79,7 @@ class SurveyController extends Controller
         $survey->update($validated);
 
         return redirect()->route('dashboard')
-            ->with('status', 'แบบสอบถามถูกอัปเดตเรียบร้อยแล้ว');
+            ->with('status', 'Survey was updated successfully.');
     }
 
     /**
@@ -91,6 +91,6 @@ class SurveyController extends Controller
         $survey->delete();
 
         return redirect()->route('dashboard')
-            ->with('status', 'แบบสอบถามถูกลบเรียบร้อยแล้ว');
+            ->with('status', 'Survey was deleted successfully.');
     }
 }

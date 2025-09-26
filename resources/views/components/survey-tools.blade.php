@@ -6,7 +6,7 @@
             type="button"
             @click="isOpen = true"
             class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative"
-            title="การตั้งค่า"
+            title="Settings"
         >
             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
@@ -14,7 +14,7 @@
             </svg>
             <!-- Tooltip -->
             <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-                การตั้งค่า
+                Settings
             </div>
         </button>
 
@@ -37,9 +37,9 @@
             <div class="relative min-h-screen flex items-center justify-center p-4">
                 <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">การตั้งค่าแบบสอบถาม</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Survey Settings</h3>
                         <button @click="isOpen = false" class="text-gray-400 hover:text-gray-500">
-                            <span class="sr-only">ปิด</span>
+                            <span class="sr-only">Close</span>
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -54,7 +54,7 @@
                                 :checked="document.getElementById('allow_multiple_responses').value === '1'"
                                 class="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
-                            <span class="text-gray-700">อนุญาตให้ตอบได้หลายครั้ง</span>
+                            <span class="text-gray-700">Allow multiple responses</span>
                         </label>
 
                         <label class="flex items-center space-x-3">
@@ -64,7 +64,7 @@
                                 :checked="document.getElementById('require_login').value === '1'"
                                 class="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                             />
-                            <span class="text-gray-700">ต้องเข้าสู่ระบบก่อนตอบแบบสอบถาม</span>
+                            <span class="text-gray-700">Login required to respond</span>
                         </label>
                     </div>
 
@@ -74,7 +74,7 @@
                             @click="isOpen = false"
                             class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                         >
-                            เสร็จสิ้น
+                            Done
                         </button>
                     </div>
                 </div>
@@ -85,70 +85,70 @@
     <!-- Add Question Button -->
     <button 
         class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative" 
-        title="เพิ่มคำถาม"
+        title="Add Question"
     >
         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
         <!-- Tooltip -->
         <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-            เพิ่มคำถาม
+            Add Question
         </div>
     </button>
 
     <!-- Add Image Button -->
     <button 
         class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative" 
-        title="เพิ่มรูปภาพ"
+        title="Add Image"
     >
         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
         <!-- Tooltip -->
         <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-            เพิ่มรูปภาพ
+            Add Image
         </div>
     </button>
 
     <!-- Add Text Button -->
     <button 
         class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative" 
-        title="เพิ่มข้อความ"
+        title="Add Text"
     >
         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
         </svg>
         <!-- Tooltip -->
         <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-            เพิ่มข้อความ
+            Add Text
         </div>
     </button>
 
     <!-- Format Button -->
     <button 
         class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative" 
-        title="จัดรูปแบบ"
+        title="Format"
     >
         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
         </svg>
         <!-- Tooltip -->
         <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-            จัดรูปแบบ
+            Format
         </div>
     </button>
 
     <!-- Help Button -->
     <button 
         class="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 focus:outline-none group relative" 
-        title="ช่วยเหลือ"
+        title="Help"
     >
         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <!-- Tooltip -->
         <div class="invisible group-hover:visible absolute right-full mr-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
-            ช่วยเหลือ
+            Help
         </div>
     </button>
 </div>
