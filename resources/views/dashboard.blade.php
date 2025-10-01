@@ -33,9 +33,22 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="px-4 py-3 bg-gray-50 border-t flex justify-end space-x-3">
-                                    <a href="{{ route('surveys.edit', $survey) }}" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
-                                    <a href="{{ route('surveys.show', $survey) }}" class="text-sm text-gray-600 hover:text-gray-900">{{ __('View Details') }}</a>
+                                <div class="px-4 py-3 bg-gray-50 border-t flex justify-end">
+                                    <div x-data="{ open: false }" class="relative">
+                                        <button @click="open = !open" class="text-gray-500 hover:text-gray-700">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 13a1 1 0 100-2 1 1 0 000 2zm0-5a1 1 0 100-2 1 1 0 000 2zm0 10a1 1 0 100-2 1 1 0 000 2z"></path>
+                                            </svg>
+                                        </button>
+                                        <div x-show="open" 
+                                             @click.away="open = false"
+                                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                            <a href="{{ route('surveys.edit', $survey) }}" 
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Edit') }}</a>
+                                            <a href="{{ route('surveys.show', $survey) }}" 
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('View Details') }}</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @empty
