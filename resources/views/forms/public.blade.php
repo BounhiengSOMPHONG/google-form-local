@@ -1,9 +1,13 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ $form->title }}
+        </h2>
+    </x-slot>
 
-@section('title', $form->title)
-
-@section('content')
-<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="py-6">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto px-4 py-8 max-w-3xl">
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
             {{ session('success') }}
@@ -100,5 +104,6 @@
             </div>
         </form>
     </div>
-</div>
-@endsection
+        </div>
+    </div>
+</x-app-layout>

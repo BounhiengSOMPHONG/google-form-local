@@ -1,9 +1,15 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Results: {{ $form->title }}
+            </h2>
+        </div>
+    </x-slot>
 
-@section('title', 'Results: ' . $form->title)
-
-@section('content')
-<div class="container mx-auto px-4 py-8">
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Results: {{ $form->title }}</h1>
         <div>
@@ -104,5 +110,6 @@
             </div>
         @endforeach
     </div>
-</div>
-@endsection
+        </div>
+    </div>
+</x-app-layout>
