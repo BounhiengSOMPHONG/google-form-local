@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/forms/{form}/export', [AnalyticsController::class, 'exportCsv'])->name('forms.export');
 });
 
+
 // Public Form Routes (no authentication required)
 Route::get('/forms/{form}/public', [ResponseController::class, 'showPublicForm'])->name('forms.public');
 Route::post('/forms/{form}/submit', [ResponseController::class, 'submitForm'])->name('forms.submit');
