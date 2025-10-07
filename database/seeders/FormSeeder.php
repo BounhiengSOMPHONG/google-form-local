@@ -15,8 +15,8 @@ class FormSeeder extends Seeder
         // Create a sample form
         $user = \App\Models\User::first(); // Get the first user created by default seeder
         $form = Form::create([
-            'title' => 'Sample Survey',
-            'description' => 'This is a sample survey to test the form system.',
+            'title' => 'Sample Form',
+            'description' => 'This is a sample form to test the form system.',
             'user_id' => $user ? $user->id : null
         ]);
 

@@ -12,7 +12,8 @@ class FormController extends Controller
     public function index()
     {
         $forms = Form::where('user_id', auth()->id())->latest()->get();
-        return view('forms.index', compact('forms'));
+        $surveys = collect(); // Empty collection since surveys are removed
+        return view('dashboard', compact('forms', 'surveys'));
     }
 
     public function create()
