@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         
-        $this->call(FormSeeder::class);
+        // $this->call(FormSeeder::class);
     }
 }
