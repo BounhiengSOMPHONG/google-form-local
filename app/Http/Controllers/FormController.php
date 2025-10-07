@@ -66,36 +66,46 @@ class FormController extends Controller
 
     public function addQuestion(Request $request, Form $form)
     {
-        $request->validate([
+        if ($request->has('options') && is_string($request->options)) {
+            $request->merge(['options' => json_decode($request->options, true) ?? []]);
+        }
+
+        $validated = $request->validate([
             'question_text' => 'required|string',
             'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date'])],
             'required' => 'boolean',
-            'options' => 'array',
+            'options' => 'nullable|array',
             'options.*' => 'string',
         ]);
 
         $highestPosition = $form->questions()->max('position');
         $position = $highestPosition !== null ? $highestPosition + 1 : 1;
 
-        $question = new Question();
-        $question->form_id = $form->id;
-        $question->question_text = $request->question_text;
-        $question->type = $request->type;
-        $question->required = $request->required ?? false;
-        $question->options = $request->type !== 'short_text' && $request->type !== 'date' ? $request->options : null;
-        $question->position = $position;
-        $question->save();
+        $dataToCreate = [
+            'form_id' => $form->id,
+            'question_text' => $validated['question_text'],
+            'type' => $validated['type'],
+            'required' => $request->required ?? false,
+            'options' => ($validated['type'] !== 'short_text' && $validated['type'] !== 'date') ? ($validated['options'] ?? null) : null,
+            'position' => $position,
+        ];
+
+        Question::create($dataToCreate);
 
         return redirect()->route('forms.edit', $form->id)->with('success', 'Question added successfully!');
     }
 
     public function updateQuestion(Request $request, Form $form, Question $question)
     {
+        if ($request->has('options') && is_string($request->options)) {
+            $request->merge(['options' => json_decode($request->options, true) ?? []]);
+        }
+
         $request->validate([
             'question_text' => 'required|string',
             'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date'])],
             'required' => 'boolean',
-            'options' => 'array',
+            'options' => 'nullable|array',
             'options.*' => 'string',
         ]);
 
