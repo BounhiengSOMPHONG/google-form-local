@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Survey;
+use App\Models\Form;
 
 class SurveyController extends Controller
 {
@@ -13,7 +14,8 @@ class SurveyController extends Controller
     public function index()
     {
         $surveys = Survey::where('user_id', auth()->id())->latest()->get();
-        return view('dashboard', compact('surveys'));
+        $forms = Form::where('user_id', auth()->id())->latest()->get();
+        return view('dashboard', compact('surveys', 'forms'));
     }
 
     /**
