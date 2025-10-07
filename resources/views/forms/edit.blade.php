@@ -2,9 +2,14 @@
     <x-slot name="header">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">Edit: {{ $form->title }}</h1>
-            <a href="{{ route('forms.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Back to Forms
-            </a>
+            <div>
+                <button onclick="showShareModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                    Share
+                </button>
+                <a href="{{ route('forms.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Back to Forms
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -256,6 +261,32 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Share Modal -->
+                <div id="share-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+                    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                        <div class="mt-3">
+                            <div class="flex justify-between items-center pb-3 border-b">
+                                <h3 class="text-lg font-bold">Share Form</h3>
+                                <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-sm text-gray-500">Anyone with the link can view and submit this form.</p>
+                                <div class="mt-2">
+                                    <input type="text" id="share-link" readonly value="{{ route('forms.public', $form->id) }}" 
+                                           class="w-full bg-gray-100 border rounded py-2 px-3 text-gray-700">
+                                    <button onclick="copyToClipboard()" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -386,6 +417,21 @@
             editOptions = [];
             updateEditOptionsList();
             document.getElementById('edit-options-container').classList.add('hidden');
+        }
+
+        function showShareModal() {
+            document.getElementById('share-modal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.add('hidden');
+        }
+
+        function copyToClipboard() {
+            const linkInput = document.getElementById('share-link');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('Link copied to clipboard!');
         }
 
         // Form submission handling
