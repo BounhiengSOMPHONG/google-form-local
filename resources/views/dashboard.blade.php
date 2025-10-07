@@ -99,7 +99,9 @@
                                         </button>
                                         <div x-show="open" 
                                              @click.away="open = false"
-                                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                             x-cloak
+                                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+                                             style="display: none;">
                                             <a href="{{ route('forms.edit', $form) }}" 
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Edit Form') }}</a>
                                             <a href="{{ route('forms.public', $form) }}" 
