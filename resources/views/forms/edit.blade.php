@@ -134,7 +134,7 @@
                         @if($questions->count() > 0)
                             <ul id="questions-sortable" class="space-y-4">
                                 @foreach($questions as $question)
-                                    <li class="question-item border border-gray-200 rounded p-4" data-question-id="{{ $question->id }}">
+                                    <li draggable="true" class="question-item border border-gray-200 rounded p-4" data-question-id="{{ $question->id }}">
                                         <div class="flex justify-between items-start">
                                             <div class="flex-1">
                                                 <div class="flex items-center">
@@ -379,19 +379,25 @@
             updateEditOptionsList();
         }
 
-        document.getElementById('option-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addOption();
-                e.preventDefault();
-            }
-        });
+        const optionInputElem = document.getElementById('option-input');
+        if (optionInputElem) {
+            optionInputElem.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addOption();
+                    e.preventDefault();
+                }
+            });
+        }
 
-        document.getElementById('edit-option-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addEditOption();
-                e.preventDefault();
-            }
-        });
+        const editOptionInputElem = document.getElementById('edit-option-input');
+        if (editOptionInputElem) {
+            editOptionInputElem.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addEditOption();
+                    e.preventDefault();
+                }
+            });
+        }
 
         // Edit question function
         function editQuestion(id, text, type, required, options) {
@@ -464,15 +470,18 @@
         // Initialize drag and drop for questions
         document.addEventListener('DOMContentLoaded', function() {
             const questionsList = document.getElementById('questions-sortable');
+            if (!questionsList) return;
+
             let draggedItem = null;
 
             questionsList.addEventListener('dragstart', function(e) {
-                draggedItem = e.target;
-                e.target.classList.add('opacity-50');
+                draggedItem = e.target.closest('li') || e.target;
+                if (draggedItem) draggedItem.classList.add('opacity-50');
             });
 
             questionsList.addEventListener('dragend', function(e) {
-                e.target.classList.remove('opacity-50');
+                const item = e.target.closest('li') || e.target;
+                if (item) item.classList.remove('opacity-50');
                 draggedItem = null;
             });
 
@@ -482,19 +491,22 @@
 
             questionsList.addEventListener('dragenter', function(e) {
                 e.preventDefault();
-                e.target.closest('li').classList.add('border-blue-500', 'border-2');
+                const li = e.target.closest('li');
+                if (li) li.classList.add('border-blue-500', 'border-2');
             });
 
             questionsList.addEventListener('dragleave', function(e) {
-                e.target.closest('li').classList.remove('border-blue-500', 'border-2');
+                const li = e.target.closest('li');
+                if (li) li.classList.remove('border-blue-500', 'border-2');
             });
 
             questionsList.addEventListener('drop', function(e) {
                 e.preventDefault();
                 const dropTarget = e.target.closest('li');
+                if (!dropTarget) return;
                 dropTarget.classList.remove('border-blue-500', 'border-2');
 
-                if (draggedItem !== dropTarget) {
+                if (draggedItem && draggedItem !== dropTarget) {
                     if (e.offsetY < dropTarget.offsetHeight / 2) {
                         dropTarget.parentNode.insertBefore(draggedItem, dropTarget);
                     } else {
