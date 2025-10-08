@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 // Public Form Routes (no authentication required)
 Route::get('/forms/{form}/public', [ResponseController::class, 'showPublicForm'])->name('forms.public');
 Route::post('/forms/{form}/submit', [ResponseController::class, 'submitForm'])->name('forms.submit');
+Route::get('/forms/{form}/success', [ResponseController::class, 'showSuccess'])->name('forms.success');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

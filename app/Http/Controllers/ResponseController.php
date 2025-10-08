@@ -88,6 +88,11 @@ class ResponseController extends Controller
             }
         }
 
-        return redirect()->route('forms.public', $form->id)->with('success', 'Form submitted successfully!');
+        return redirect()->route('forms.success', $form->id);
+    }
+
+    public function showSuccess(Form $form)
+    {
+        return view('forms.success', compact('form'));
     }
 }
