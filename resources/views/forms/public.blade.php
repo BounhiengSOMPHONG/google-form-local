@@ -22,7 +22,7 @@
             @endif
         </div>
 
-        <form action="{{ route('forms.submit', $form->id) }}" method="POST">
+        <form action="{{ route('forms.submit', $form) }}" method="POST">
             @csrf
             @if(isset($responseId) && $responseId)
                 <input type="hidden" name="response_id" value="{{ $responseId }}">

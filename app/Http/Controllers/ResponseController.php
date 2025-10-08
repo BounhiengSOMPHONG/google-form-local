@@ -115,7 +115,8 @@ class ResponseController extends Controller
         }
 
         // Redirect to success with the response id so the edit link can point back
-        return redirect()->route('forms.success', $form->id)->with('response_id', $response->id);
+        // Use the model instance so route model binding fills {form:public_token}
+        return redirect()->route('forms.success', $form)->with('response_id', $response->id);
     }
 
     public function showSuccess(Form $form)
