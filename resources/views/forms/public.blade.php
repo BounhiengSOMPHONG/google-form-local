@@ -24,6 +24,9 @@
 
         <form action="{{ route('forms.submit', $form->id) }}" method="POST">
             @csrf
+            @if(isset($responseId) && $responseId)
+                <input type="hidden" name="response_id" value="{{ $responseId }}">
+            @endif
 
             @foreach($questions as $question)
                 <div class="mb-6 p-4 border border-gray-200 rounded">
@@ -44,6 +47,7 @@
                         <input type="text" 
                                name="question_{{ $question->id }}" 
                                id="question_{{ $question->id }}"
+                               value="{{ old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') }}"
                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('question_' . $question->id) border-red-500 @enderror"
                                @if($question->required) required @endif>
                     @elseif($question->type === 'radio')
@@ -54,6 +58,7 @@
                                            name="question_{{ $question->id }}" 
                                            id="question_{{ $question->id }}_{{ $loop->index }}"
                                            value="{{ $option }}"
+                                           {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500"
                                            @if($question->required) required @endif>
                                     <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-2 block text-gray-700">
@@ -70,6 +75,7 @@
                                            name="question_{{ $question->id }}[]" 
                                            id="question_{{ $question->id }}_{{ $loop->index }}"
                                            value="{{ $option }}"
+                                           {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500">
                                     <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-2 block text-gray-700">
                                         {{ $option }}
@@ -84,7 +90,7 @@
                                 @if($question->required) required @endif>
                             <option value="">Select an option</option>
                             @foreach($question->options as $option)
-                                <option value="{{ $option }}">{{ $option }}</option>
+                                <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
                             @endforeach
                         </select>
                     @elseif($question->type === 'date')

@@ -10,10 +10,24 @@ use Illuminate\Http\Request;
 
 class ResponseController extends Controller
 {
-    public function showPublicForm(Form $form)
+    public function showPublicForm(Request $request, Form $form)
     {
         $questions = $form->questions()->orderBy('position')->get();
-        return view('forms.public', compact('form', 'questions'));
+
+        $prefill = [];
+        $responseId = $request->query('response_id');
+        if ($responseId) {
+            $response = Response::with('responseAnswers')->where('id', $responseId)->where('form_id', $form->id)->first();
+            if ($response) {
+                foreach ($response->responseAnswers as $answer) {
+                    $key = 'question_' . $answer->question_id;
+                    $decoded = json_decode($answer->answer, true);
+                    $prefill[$key] = $decoded === null ? $answer->answer : $decoded;
+                }
+            }
+        }
+
+        return view('forms.public', compact('form', 'questions', 'prefill', 'responseId'));
     }
 
     public function submitForm(Request $request, Form $form)
@@ -66,16 +80,28 @@ class ResponseController extends Controller
 
         $request->validate($validatedData);
 
-        // Create a new response record
-        $response = Response::create([
-            'form_id' => $form->id
-        ]);
+        // If response_id provided, update existing response; otherwise create new
+        $existingResponseId = $request->input('response_id');
+        if ($existingResponseId) {
+            $response = Response::where('id', $existingResponseId)->where('form_id', $form->id)->first();
+        } else {
+            $response = null;
+        }
 
-        // Save each answer
+        if (! $response) {
+            $response = Response::create([
+                'form_id' => $form->id
+            ]);
+        } else {
+            // remove previous answers so we can recreate them
+            $response->responseAnswers()->delete();
+        }
+
+        // Save each answer (create new ResponseAnswer records)
         foreach ($request->all() as $questionId => $answer) {
             if (str_starts_with($questionId, 'question_')) {
                 $questionIdNum = str_replace('question_', '', $questionId);
-                
+
                 // Find the question to validate the ID belongs to this form
                 $question = $form->questions()->where('id', $questionIdNum)->first();
                 if ($question) {
@@ -88,7 +114,8 @@ class ResponseController extends Controller
             }
         }
 
-        return redirect()->route('forms.success', $form->id);
+        // Redirect to success with the response id so the edit link can point back
+        return redirect()->route('forms.success', $form->id)->with('response_id', $response->id);
     }
 
     public function showSuccess(Form $form)
