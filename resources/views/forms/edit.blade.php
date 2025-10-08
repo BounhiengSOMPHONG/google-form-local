@@ -277,7 +277,7 @@
                             <div class="mt-4">
                                 <p class="text-sm text-gray-500">Anyone with the link can view and submit this form.</p>
                                 <div class="mt-2">
-                                    <input type="text" id="share-link" readonly value="{{ route('forms.public', $form->id) }}" 
+                                    <input type="text" id="share-link" readonly value="{{ route('forms.public', $form) }}" 
                                            class="w-full bg-gray-100 border rounded py-2 px-3 text-gray-700">
                                     <button onclick="copyToClipboard()" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Copy Link

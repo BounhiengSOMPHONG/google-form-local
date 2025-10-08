@@ -12,6 +12,18 @@ class FormController extends Controller
     public function index()
     {
         $forms = Form::where('user_id', auth()->id())->latest()->get();
+
+        // Ensure every form has a public_token so URL generation for public routes won't fail
+        foreach ($forms as $form) {
+            if (empty($form->public_token)) {
+                do {
+                    $token = bin2hex(random_bytes(16));
+                } while (Form::where('public_token', $token)->exists());
+
+                $form->public_token = $token;
+                $form->save();
+            }
+        }
         $surveys = collect(); // Empty collection since surveys are removed
         return view('dashboard', compact('forms', 'surveys'));
     }
@@ -28,10 +40,16 @@ class FormController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        // Generate a unique public token for sharing
+        do {
+            $token = bin2hex(random_bytes(16));
+        } while (Form::where('public_token', $token)->exists());
+
         $form = Form::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => auth()->id(),
+            'public_token' => $token,
         ]);
 
         return redirect()->route('forms.edit', $form->id)->with('success', 'Form created successfully!');

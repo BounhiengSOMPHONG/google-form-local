@@ -13,6 +13,7 @@ class Form extends Model
         'title',
         'description',
         'user_id',
+        'public_token',
     ];
 
     public function user()
