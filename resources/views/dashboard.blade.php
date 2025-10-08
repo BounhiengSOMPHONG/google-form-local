@@ -102,12 +102,17 @@
                                              x-cloak
                                              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
                                              style="display: none;">
-                                            <a href="{{ route('forms.edit', $form) }}" 
+                                            <a href="{{ route('forms.edit', $form) }}"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Edit Form') }}</a>
-                                            <a href="{{ route('forms.public', $form) }}" 
+                                            <a href="{{ route('forms.public', $form) }}"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" target="_blank">{{ __('View Form') }}</a>
-                                            <a href="{{ route('forms.results', $form) }}" 
+                                            <a href="{{ route('forms.results', $form) }}"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('View Results') }}</a>
+                                            <form method="POST" action="{{ route('forms.destroy', $form) }}" onsubmit="return confirm('ลบแบบฟอร์มนี้หรือไม่?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">{{ __('Delete') }}</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
