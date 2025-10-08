@@ -134,7 +134,7 @@
                         @if($questions->count() > 0)
                             <ul id="questions-sortable" class="space-y-4">
                                 @foreach($questions as $question)
-                                    <li class="question-item border border-gray-200 rounded p-4" data-question-id="{{ $question->id }}">
+                                    <li draggable="true" class="question-item border border-gray-200 rounded p-4" data-question-id="{{ $question->id }}">
                                         <div class="flex justify-between items-start">
                                             <div class="flex-1">
                                                 <div class="flex items-center">
@@ -163,7 +163,12 @@
                                             </div>
                                             
                                             <div class="flex space-x-2">
-                                                <button onclick="editQuestion({{ $question->id }}, '{{ addslashes($question->question_text) }}', '{{ $question->type }}', {{ $question->required ? 'true' : 'false' }}, @json($question->options))" 
+                                                <button onclick="openEditModal(this)"
+                                                        data-question-id="{{ $question->id }}"
+                                                        data-question-text="{{ e($question->question_text) }}"
+                                                        data-question-type="{{ $question->type }}"
+                                                        data-question-required="{{ $question->required ? '1' : '0' }}"
+                                                        data-question-options='@json($question->options)'
                                                         class="bg-yellow-500 hover:bg-yellow-700 text-white py-1 px-2 rounded text-sm">
                                                     Edit
                                                 </button>
@@ -277,7 +282,7 @@
                             <div class="mt-4">
                                 <p class="text-sm text-gray-500">Anyone with the link can view and submit this form.</p>
                                 <div class="mt-2">
-                                    <input type="text" id="share-link" readonly value="{{ route('forms.public', $form->id) }}" 
+                                    <input type="text" id="share-link" readonly value="{{ route('forms.public', $form) }}" 
                                            class="w-full bg-gray-100 border rounded py-2 px-3 text-gray-700">
                                     <button onclick="copyToClipboard()" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Copy Link
@@ -340,7 +345,7 @@
                 const div = document.createElement('div');
                 div.className = 'flex items-center mb-1';
                 div.innerHTML = `
-                    <span class="bg-gray-100 px-2 py-1 rounded mr-2">${option}</span>
+                    <input type="text" value="${option}" oninput="setOptionValue(${index}, this.value)" class="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 mr-2" />
                     <button type="button" onclick="removeOption(${index})" class="text-red-500 hover:text-red-700">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -358,7 +363,7 @@
                 const div = document.createElement('div');
                 div.className = 'flex items-center mb-1';
                 div.innerHTML = `
-                    <span class="bg-gray-100 px-2 py-1 rounded mr-2">${option}</span>
+                    <input type="text" value="${option}" oninput="setEditOptionValue(${index}, this.value)" class="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 mr-2" />
                     <button type="button" onclick="removeEditOption(${index})" class="text-red-500 hover:text-red-700">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -367,6 +372,16 @@
                 `;
                 container.appendChild(div);
             });
+        }
+
+        // Update option value for new-question options
+        function setOptionValue(index, value) {
+            currentOptions[index] = value;
+        }
+
+        // Update option value for edit-question modal
+        function setEditOptionValue(index, value) {
+            editOptions[index] = value;
         }
 
         function removeOption(index) {
@@ -379,19 +394,25 @@
             updateEditOptionsList();
         }
 
-        document.getElementById('option-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addOption();
-                e.preventDefault();
-            }
-        });
+        const optionInputElem = document.getElementById('option-input');
+        if (optionInputElem) {
+            optionInputElem.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addOption();
+                    e.preventDefault();
+                }
+            });
+        }
 
-        document.getElementById('edit-option-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addEditOption();
-                e.preventDefault();
-            }
-        });
+        const editOptionInputElem = document.getElementById('edit-option-input');
+        if (editOptionInputElem) {
+            editOptionInputElem.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addEditOption();
+                    e.preventDefault();
+                }
+            });
+        }
 
         // Edit question function
         function editQuestion(id, text, type, required, options) {
@@ -407,6 +428,17 @@
             toggleEditOptions(type);
             
             document.getElementById('edit-modal').classList.remove('hidden');
+        }
+
+        // New handler that reads data-* attributes from the clicked button
+        function openEditModal(buttonElem) {
+            const id = buttonElem.getAttribute('data-question-id');
+            const text = buttonElem.getAttribute('data-question-text') || '';
+            const type = buttonElem.getAttribute('data-question-type') || 'short_text';
+            const required = buttonElem.getAttribute('data-question-required') === '1';
+            const options = JSON.parse(buttonElem.getAttribute('data-question-options') || 'null');
+
+            editQuestion(id, text, type, required, options);
         }
 
         function closeEditModal() {
@@ -464,15 +496,18 @@
         // Initialize drag and drop for questions
         document.addEventListener('DOMContentLoaded', function() {
             const questionsList = document.getElementById('questions-sortable');
+            if (!questionsList) return;
+
             let draggedItem = null;
 
             questionsList.addEventListener('dragstart', function(e) {
-                draggedItem = e.target;
-                e.target.classList.add('opacity-50');
+                draggedItem = e.target.closest('li') || e.target;
+                if (draggedItem) draggedItem.classList.add('opacity-50');
             });
 
             questionsList.addEventListener('dragend', function(e) {
-                e.target.classList.remove('opacity-50');
+                const item = e.target.closest('li') || e.target;
+                if (item) item.classList.remove('opacity-50');
                 draggedItem = null;
             });
 
@@ -482,19 +517,22 @@
 
             questionsList.addEventListener('dragenter', function(e) {
                 e.preventDefault();
-                e.target.closest('li').classList.add('border-blue-500', 'border-2');
+                const li = e.target.closest('li');
+                if (li) li.classList.add('border-blue-500', 'border-2');
             });
 
             questionsList.addEventListener('dragleave', function(e) {
-                e.target.closest('li').classList.remove('border-blue-500', 'border-2');
+                const li = e.target.closest('li');
+                if (li) li.classList.remove('border-blue-500', 'border-2');
             });
 
             questionsList.addEventListener('drop', function(e) {
                 e.preventDefault();
                 const dropTarget = e.target.closest('li');
+                if (!dropTarget) return;
                 dropTarget.classList.remove('border-blue-500', 'border-2');
 
-                if (draggedItem !== dropTarget) {
+                if (draggedItem && draggedItem !== dropTarget) {
                     if (e.offsetY < dropTarget.offsetHeight / 2) {
                         dropTarget.parentNode.insertBefore(draggedItem, dropTarget);
                     } else {

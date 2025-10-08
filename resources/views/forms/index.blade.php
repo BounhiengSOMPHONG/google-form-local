@@ -42,7 +42,7 @@
                                                 <a href="{{ route('forms.edit', $form->id) }}" class="text-sm text-blue-600 hover:text-blue-900">
                                                     {{ __('Edit') }}
                                                 </a>
-                                                <a href="{{ route('forms.public', $form->id) }}" class="text-sm text-green-600 hover:text-green-900" target="_blank">
+                                                <a href="{{ route('forms.public', $form) }}" class="text-sm text-green-600 hover:text-green-900" target="_blank">
                                                     {{ __('View') }}
                                                 </a>
                                                 <a href="{{ route('forms.results', $form->id) }}" class="text-sm text-purple-600 hover:text-purple-900">
