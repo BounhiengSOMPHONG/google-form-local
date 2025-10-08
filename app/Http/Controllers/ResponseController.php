@@ -22,41 +22,45 @@ class ResponseController extends Controller
         $validatedData = [];
 
         foreach ($questions as $question) {
+            $fieldKey = 'question_' . $question->id;
             $rule = $question->required ? 'required' : 'nullable';
-            
+
             switch ($question->type) {
                 case 'short_text':
-                    $validatedData[$question->id] = ['string', 'max:1000'];
+                    $validatedData[$fieldKey] = [$rule, 'string', 'max:1000'];
                     break;
                 case 'radio':
                 case 'dropdown':
-                    $validatedData[$question->id] = [$rule, 'string', 'in:' . implode(',', $question->options)];
+                    $validatedData[$fieldKey] = [$rule, 'string', 'in:' . implode(',', $question->options)];
                     break;
                 case 'checkbox':
                     if ($question->required) {
-                        $validatedData[$question->id] = ['required', 'array', 'min:1'];
+                        $validatedData[$fieldKey] = ['required', 'array', 'min:1'];
                     } else {
-                        $validatedData[$question->id] = ['nullable', 'array'];
+                        $validatedData[$fieldKey] = ['nullable', 'array'];
                     }
-                    $validatedData[$question->id][] = 'array';
-                    $validatedData[$question->id][] = function ($attribute, $value, $fail) use ($question) {
+
+                    // custom validator to ensure selected options are valid
+                    $validatedData[$fieldKey][] = function ($attribute, $value, $fail) use ($question) {
                         if (!is_array($value)) {
                             $fail('The ' . $attribute . ' must be an array.');
+                            return;
                         }
-                        
+
                         $validOptions = $question->options;
                         foreach ($value as $item) {
                             if (!in_array($item, $validOptions)) {
                                 $fail('The selected ' . $attribute . ' is invalid.');
+                                return;
                             }
                         }
                     };
                     break;
                 case 'date':
-                    $validatedData[$question->id] = [$rule, 'date'];
+                    $validatedData[$fieldKey] = [$rule, 'date'];
                     break;
                 default:
-                    $validatedData[$question->id] = ['string'];
+                    $validatedData[$fieldKey] = [$rule, 'string'];
             }
         }
 
