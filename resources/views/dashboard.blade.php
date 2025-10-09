@@ -104,10 +104,8 @@
                                              x-cloak
                                              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
                                              style="display: none;">
-                                            <a href="{{ route('forms.edit', $form) }}"
-                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('Edit Form') }}</a>
-                                            <a href="{{ route('forms.public', $form) }}"
-                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" target="_blank">{{ __('View Form') }}</a>
+                                            <!-- Edit Form link removed per user request -->
+                                            <!-- View Form link removed per user request -->
                                             <a href="{{ route('forms.results', $form) }}"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('View Results') }}</a>
                                             <form method="POST" action="{{ route('forms.destroy', $form) }}" onsubmit="return confirm('ลบแบบฟอร์มนี้หรือไม่?');">

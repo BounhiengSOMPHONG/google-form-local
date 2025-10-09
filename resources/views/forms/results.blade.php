@@ -13,9 +13,7 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Results: {{ $form->title }}</h1>
         <div>
-            <a href="{{ route('forms.public', $form) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" target="_blank">
-                View Form
-            </a>
+            <!-- View Form button removed per user request -->
             <a href="{{ route('forms.export', $form->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Export CSV
             </a>
