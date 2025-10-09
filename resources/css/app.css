@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Brand color overrides and utility helpers for T Plus theme */
+:root {
+  --brand-yellow: #FFD500;
+  --brand-black: #1F2937;
+  --card-yellow-50: #FFFEF5; /* light */
+  --card-yellow-100: #FFF9E5; /* slightly stronger */
+}
+
+/* Small utility classes used by templates when Tailwind utilities are not preferred */
+.bg-brand { background-color: var(--brand-yellow) !important; }
+.text-brand { color: var(--brand-black) !important; }
+.ring-brand { box-shadow: 0 0 0 3px rgba(255, 213, 0, 0.3) !important; }
+.bg-card-yellow-50 { background-color: var(--card-yellow-50) !important; }
+.bg-card-yellow-100 { background-color: var(--card-yellow-100) !important; }
+.border-card-yellow-100 { border-color: var(--card-yellow-100) !important; }
+.border-brand { border-color: var(--brand-yellow) !important; }
+
+/* Keep red and green semantics untouched */

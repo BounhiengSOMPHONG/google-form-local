@@ -8,7 +8,7 @@
                 <p class="text-gray-600 text-sm mt-1">Manage your forms</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-brand uppercase tracking-widest hover:opacity-90 focus:opacity-90 active:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition ease-in-out duration-150">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
@@ -24,8 +24,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-blue-100">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 rounded-full bg-card-yellow-50">
+                            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
                         </div>
@@ -38,8 +38,8 @@
                 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-purple-100">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-3 rounded-full bg-card-yellow-100">
+                            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
                         </div>
@@ -55,7 +55,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-gray-100">
-                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
@@ -71,7 +71,7 @@
             <div>
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium text-gray-900">{{ __('My Forms') }}</h3>
-                    <a href="{{ route('forms.index') }}" class="text-sm text-blue-600 hover:text-blue-800">{{ __('View All') }}</a>
+                    <a href="{{ route('forms.index') }}" class="text-sm text-brand hover:opacity-90">{{ __('View All') }}</a>
                 </div>
                 
                 @if($forms->count() > 0)
@@ -127,7 +127,7 @@
                         <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('No forms') }}</h3>
                         <p class="mt-1 text-sm text-gray-500">{{ __('Get started by creating a new form.') }}</p>
                         <div class="mt-6">
-                            <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-brand uppercase tracking-widest hover:opacity-90 focus:opacity-90 active:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition ease-in-out duration-150">
                                 {{ __('Create Form') }}
                             </a>
                         </div>

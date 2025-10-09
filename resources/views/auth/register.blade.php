@@ -26,7 +26,7 @@
         <!-- Gender -->
         <div class="mt-4">
             <x-input-label for="gender" :value="__('Gender')" />
-            <select id="gender" name="gender" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+            <select id="gender" name="gender" class="block mt-1 w-full border-gray-300 focus:border-brand focus:ring-brand rounded-md shadow-sm">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex items-center justify-between mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 
