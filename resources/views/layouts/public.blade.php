@@ -16,6 +16,15 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
+            <!-- Public header with logo -->
+            <header class="bg-white border-b">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="inline-block" aria-hidden="true">
+                        <x-application-logo class="h-10 w-auto" />
+                    </div>
+                </div>
+            </header>
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}

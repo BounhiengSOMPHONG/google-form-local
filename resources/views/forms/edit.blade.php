@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">Edit: {{ $form->title }}</h1>
             <div>
-                <button onclick="showShareModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                <button onclick="showShareModal()" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded mr-2">
                     Share
                 </button>
                 <a href="{{ route('forms.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
@@ -55,7 +55,7 @@
                         <!-- Accepting Responses moved into Share modal -->
 
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button type="submit" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Update Form
                             </button>
                         </div>
@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button type="submit" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Add Question
                             </button>
                         </div>
@@ -257,7 +257,7 @@
                                 </div>
 
                                 <div class="items-center justify-between pt-3 border-t">
-                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    <button type="submit" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                         Update Question
                                     </button>
                                     <button type="button" onclick="closeEditModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2">
@@ -286,7 +286,7 @@
                                 <div class="mt-2">
                                     <input type="text" id="share-link" readonly value="{{ route('forms.public', $form) }}" 
                                            class="w-full bg-gray-100 border rounded py-2 px-3 text-gray-700">
-                                    <button onclick="copyToClipboard()" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        <button onclick="copyToClipboard()" class="mt-2 bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded">
                                         Copy Link
                                     </button>
                                 </div>
@@ -592,19 +592,19 @@
             questionsList.addEventListener('dragenter', function(e) {
                 e.preventDefault();
                 const li = e.target.closest('li');
-                if (li) li.classList.add('border-blue-500', 'border-2');
+                if (li) li.classList.add('border-brand', 'border-2');
             });
 
             questionsList.addEventListener('dragleave', function(e) {
                 const li = e.target.closest('li');
-                if (li) li.classList.remove('border-blue-500', 'border-2');
+                if (li) li.classList.remove('border-brand', 'border-2');
             });
 
             questionsList.addEventListener('drop', function(e) {
                 e.preventDefault();
                 const dropTarget = e.target.closest('li');
                 if (!dropTarget) return;
-                dropTarget.classList.remove('border-blue-500', 'border-2');
+                dropTarget.classList.remove('border-brand', 'border-2');
 
                 if (draggedItem && draggedItem !== dropTarget) {
                     if (e.offsetY < dropTarget.offsetHeight / 2) {

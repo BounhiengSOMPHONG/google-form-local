@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Forms') }}
             </h2>
-            <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+            <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-brand uppercase tracking-widest hover:opacity-90 focus:opacity-90 active:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Create New Form') }}
             </a>
         </div>
@@ -23,7 +23,7 @@
                     @if($forms->isEmpty())
                         <div class="text-center py-12">
                             <p class="text-gray-500 text-lg">You don't have any forms yet.</p>
-                            <a href="{{ route('forms.create') }}" class="inline-block mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('forms.create') }}" class="inline-block mt-4 bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded">
                                 Create Your First Form
                             </a>
                         </div>
@@ -39,13 +39,11 @@
                                                 {{ $form->responses->count() }} responses
                                             </span>
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('forms.edit', $form->id) }}" class="text-sm text-blue-600 hover:text-blue-900">
+                                                <a href="{{ route('forms.edit', $form->id) }}" class="text-sm text-brand hover:opacity-90">
                                                     {{ __('Edit') }}
                                                 </a>
-                                                <a href="{{ route('forms.public', $form) }}" class="text-sm text-green-600 hover:text-green-900" target="_blank">
-                                                    {{ __('View') }}
-                                                </a>
-                                                <a href="{{ route('forms.results', $form->id) }}" class="text-sm text-purple-600 hover:text-purple-900">
+                                                <!-- View link removed per user request -->
+                                                <a href="{{ route('forms.results', $form->id) }}" class="text-sm text-brand hover:opacity-90">
                                                     {{ __('Results') }}
                                                 </a>
                                             </div>

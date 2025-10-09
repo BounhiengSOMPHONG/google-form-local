@@ -13,10 +13,8 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Results: {{ $form->title }}</h1>
         <div>
-            <a href="{{ route('forms.public', $form) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2" target="_blank">
-                View Form
-            </a>
-            <a href="{{ route('forms.export', $form->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <!-- View Form button removed per user request -->
+            <a href="{{ route('forms.export', $form->id) }}" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded inline-block">
                 Export CSV
             </a>
         </div>
@@ -24,17 +22,17 @@
 
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                <h3 class="text-lg font-semibold text-blue-800">Total Responses</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ $totalResponses }}</p>
+            <div class="bg-card-yellow-50 p-4 rounded-lg border border-card-yellow-100">
+                <h3 class="text-lg font-semibold text-brand">Total Responses</h3>
+                <p class="text-3xl font-bold text-brand">{{ $totalResponses }}</p>
             </div>
             <div class="bg-green-50 p-4 rounded-lg border border-green-100">
                 <h3 class="text-lg font-semibold text-green-800">Questions</h3>
                 <p class="text-3xl font-bold text-green-600">{{ $form->questions->count() }}</p>
             </div>
-            <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                <h3 class="text-lg font-semibold text-purple-800">Created</h3>
-                <p class="text-xl font-bold text-purple-600">{{ $form->created_at->format('M d, Y') }}</p>
+            <div class="bg-card-yellow-100 p-4 rounded-lg border border-card-yellow-100">
+                <h3 class="text-lg font-semibold text-brand">Created</h3>
+                <p class="text-xl font-bold text-brand">{{ $form->created_at->format('M d, Y') }}</p>
             </div>
         </div>
 
@@ -66,7 +64,7 @@
                                     <span class="text-sm font-medium">{{ $data['count'] }} ({{ $data['percentage'] }}%)</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $data['percentage'] }}%"></div>
+                                    <div class="bg-brand h-2.5 rounded-full" style="width: {{ $data['percentage'] }}%"></div>
                                 </div>
                             </div>
                         @endforeach

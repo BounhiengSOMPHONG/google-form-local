@@ -65,7 +65,7 @@
                                            id="question_{{ $question->id }}_{{ $loop->index }}"
                                            value="{{ $option }}"
                                            {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                                           class="h-4 w-4 text-brand focus:ring-brand"
                                            @if($question->required) required @endif>
                                     <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-2 block text-gray-700">
                                         {{ $option }}
@@ -82,7 +82,7 @@
                                            id="question_{{ $question->id }}_{{ $loop->index }}"
                                            value="{{ $option }}"
                                            {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
-                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500">
+                                           class="h-4 w-4 text-brand focus:ring-brand">
                                     <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-2 block text-gray-700">
                                         {{ $option }}
                                     </label>
@@ -110,7 +110,7 @@
             @endforeach
 
             <div class="flex items-center justify-between mt-8">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
+                <button type="submit" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
                     Submit Form
                 </button>
             </div>
