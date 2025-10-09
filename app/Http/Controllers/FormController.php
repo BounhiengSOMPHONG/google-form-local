@@ -161,4 +161,16 @@ class FormController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function setAccepting(Request $request, Form $form)
+    {
+        $request->validate([
+            'accepting_responses' => 'required|in:0,1',
+        ]);
+
+        $form->accepting_responses = (bool)$request->accepting_responses;
+        $form->save();
+
+        return response()->json(['success' => true]);
+    }
 }
