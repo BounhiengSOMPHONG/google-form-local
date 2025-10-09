@@ -34,7 +34,8 @@ class ResponseController extends Controller
     {
         // Prevent accepting responses if the form is closed
         if (! $form->accepting_responses) {
-            return redirect()->route('forms.public', $form)->with('error', 'This form is not accepting responses.');
+            // Preserve the user's input so they don't lose their answers when rejected
+            return redirect()->route('forms.public', $form)->withInput()->with('error', 'This form is not accepting responses.');
         }
 
         $questions = $form->questions;
