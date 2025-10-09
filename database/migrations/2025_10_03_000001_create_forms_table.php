@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            // whether the form is accepting new responses
+            $table->boolean('accepting_responses')->default(true);
             $table->timestamps();
         });
     }

@@ -52,6 +52,22 @@
                             @enderror
                         </div>
 
+                        <div class="mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="accepting_responses">
+                                Accepting Responses
+                            </label>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-4">
+                                    <input type="radio" name="accepting_responses" value="1" class="form-radio" {{ old('accepting_responses', $form->accepting_responses) ? 'checked' : '' }}>
+                                    <span class="ml-2">Open</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="accepting_responses" value="0" class="form-radio" {{ old('accepting_responses', $form->accepting_responses) ? '' : 'checked' }}>
+                                    <span class="ml-2">Closed</span>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="flex items-center justify-between">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Update Form

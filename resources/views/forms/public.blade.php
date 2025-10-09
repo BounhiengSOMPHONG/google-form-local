@@ -22,6 +22,12 @@
             @endif
         </div>
 
+        @if(! $form->accepting_responses)
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                This form is currently not accepting responses.
+            </div>
+        @endif
+
         <form action="{{ route('forms.submit', $form) }}" method="POST">
             @csrf
             @if(isset($responseId) && $responseId)
@@ -104,7 +110,7 @@
             @endforeach
 
             <div class="flex items-center justify-between mt-8">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
                     Submit Form
                 </button>
             </div>

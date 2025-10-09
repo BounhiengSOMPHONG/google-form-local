@@ -32,6 +32,11 @@ class ResponseController extends Controller
 
     public function submitForm(Request $request, Form $form)
     {
+        // Prevent accepting responses if the form is closed
+        if (! $form->accepting_responses) {
+            return redirect()->route('forms.public', $form)->with('error', 'This form is not accepting responses.');
+        }
+
         $questions = $form->questions;
         $validatedData = [];
 

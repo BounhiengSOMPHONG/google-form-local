@@ -66,11 +66,13 @@ class FormController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'accepting_responses' => 'nullable|in:0,1',
         ]);
 
         $form->update([
             'title' => $request->title,
             'description' => $request->description,
+            'accepting_responses' => $request->has('accepting_responses') ? (bool)$request->accepting_responses : true,
         ]);
 
         return redirect()->route('forms.edit', $form->id)->with('success', 'Form updated successfully!');
