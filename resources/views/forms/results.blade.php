@@ -53,10 +53,16 @@
                 @if(in_array($stats['question']->type, ['radio', 'checkbox', 'dropdown']))
                     <!-- Bar chart for multiple choice answers -->
                     <div class="mb-6">
-                        @foreach($stats['answers'] as $answer => $data)
+                        @php
+                            // If question has defined options, iterate those to preserve order
+                            $displayOptions = is_array($stats['question']->options) ? $stats['question']->options : array_keys($stats['answers']);
+                        @endphp
+
+                        @foreach($displayOptions as $option)
+                            @php $data = $stats['answers'][$option] ?? ['count' => 0, 'percentage' => 0]; @endphp
                             <div class="mb-2">
                                 <div class="flex justify-between mb-1">
-                                    <span class="text-sm font-medium">{{ $answer }}</span>
+                                    <span class="text-sm font-medium">{{ $option }}</span>
                                     <span class="text-sm font-medium">{{ $data['count'] }} ({{ $data['percentage'] }}%)</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5">

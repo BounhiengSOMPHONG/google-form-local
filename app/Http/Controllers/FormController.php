@@ -66,11 +66,13 @@ class FormController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'accepting_responses' => 'nullable|in:0,1',
         ]);
 
         $form->update([
             'title' => $request->title,
             'description' => $request->description,
+            'accepting_responses' => $request->has('accepting_responses') ? (bool)$request->accepting_responses : true,
         ]);
 
         return redirect()->route('forms.edit', $form->id)->with('success', 'Form updated successfully!');
@@ -156,6 +158,18 @@ class FormController extends Controller
                 $question->update(['position' => $index + 1]);
             }
         }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function setAccepting(Request $request, Form $form)
+    {
+        $request->validate([
+            'accepting_responses' => 'required|in:0,1',
+        ]);
+
+        $form->accepting_responses = (bool)$request->accepting_responses;
+        $form->save();
 
         return response()->json(['success' => true]);
     }

@@ -78,18 +78,20 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($forms as $form)
                             <div class="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                                <div class="p-4">
-                                    <h4 class="font-semibold text-gray-900 mb-2">{{ $form->title }}</h4>
-                                    <p class="text-gray-600 text-sm mb-4">{{ Str::limit($form->description, 100) }}</p>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">
-                                            {{ $form->responses->count() }} {{ __('responses') }}
-                                        </span>
-                                        <span class="text-sm text-gray-500">
-                                            {{ $form->questions->count() }} {{ __('questions') }}
-                                        </span>
+                                <a href="{{ route('forms.edit', $form) }}" class="block hover:no-underline text-inherit">
+                                    <div class="p-4">
+                                        <h4 class="font-semibold text-gray-900 mb-2">{{ $form->title }}</h4>
+                                        <p class="text-gray-600 text-sm mb-4">{{ Str::limit($form->description, 100) }}</p>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-500">
+                                                {{ $form->responses->count() }} {{ __('responses') }}
+                                            </span>
+                                            <span class="text-sm text-gray-500">
+                                                {{ $form->questions->count() }} {{ __('questions') }}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                                 <div class="px-4 py-3 bg-gray-50 border-t flex justify-end">
                                     <div x-data="{ open: false }" class="relative">
                                         <button @click="open = !open" class="text-gray-500 hover:text-gray-700">

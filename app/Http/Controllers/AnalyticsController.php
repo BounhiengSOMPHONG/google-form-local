@@ -34,6 +34,16 @@ class AnalyticsController extends Controller
             'answers' => [],
         ];
 
+        // Ensure all defined options are present with zero count so unselected
+        // options (e.g. "10") still appear in the results output.
+        if (in_array($question->type, ['radio', 'checkbox', 'dropdown']) && is_array($question->options)) {
+            foreach ($question->options as $opt) {
+                if (!isset($stats['answers'][$opt])) {
+                    $stats['answers'][$opt] = 0;
+                }
+            }
+        }
+
         foreach ($responses as $response) {
             foreach ($response->responseAnswers as $answer) {
                 if ($answer->question_id == $question->id) {

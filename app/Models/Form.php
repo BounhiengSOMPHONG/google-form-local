@@ -14,6 +14,7 @@ class Form extends Model
         'description',
         'user_id',
         'public_token',
+        'accepting_responses',
     ];
 
     public function user()

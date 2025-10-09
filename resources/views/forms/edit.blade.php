@@ -52,6 +52,8 @@
                             @enderror
                         </div>
 
+                        <!-- Accepting Responses moved into Share modal -->
+
                         <div class="flex items-center justify-between">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Update Form
@@ -288,6 +290,17 @@
                                         Copy Link
                                     </button>
                                 </div>
+                                <div class="mt-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">Accepting Responses</label>
+                                    <div class="flex items-center">
+                                        <div id="accepting-switch" class="relative inline-flex items-center cursor-pointer" role="switch" aria-checked="{{ $form->accepting_responses ? 'true' : 'false' }}">
+                                            <input id="accepting-checkbox" type="checkbox" class="sr-only" {{ $form->accepting_responses ? 'checked' : '' }}>
+                                            <div id="accepting-track" class="w-12 h-6 bg-gray-200 rounded-full shadow-inner"></div>
+                                            <div id="accepting-dot" class="absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow transform transition-transform"></div>
+                                        </div>
+                                        <span id="accepting-label" class="ml-3 text-sm text-gray-700">{{ $form->accepting_responses ? 'Open' : 'Closed' }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -465,6 +478,67 @@
             document.execCommand('copy');
             alert('Link copied to clipboard!');
         }
+
+        // Apply accepting_responses change from Share modal (switch)
+        (function() {
+            const switchContainer = document.getElementById('accepting-switch');
+            if (!switchContainer) return;
+            const checkbox = document.getElementById('accepting-checkbox');
+            const dot = document.getElementById('accepting-dot');
+            const label = document.getElementById('accepting-label');
+
+            function updateVisual(isOn) {
+                if (isOn) {
+                    document.getElementById('accepting-track').classList.remove('bg-gray-200');
+                    document.getElementById('accepting-track').classList.add('bg-green-400');
+                    dot.style.transform = 'translateX(100%)';
+                    label.textContent = 'Open';
+                    switchContainer.setAttribute('aria-checked', 'true');
+                } else {
+                    document.getElementById('accepting-track').classList.remove('bg-green-400');
+                    document.getElementById('accepting-track').classList.add('bg-gray-200');
+                    dot.style.transform = 'translateX(0)';
+                    label.textContent = 'Closed';
+                    switchContainer.setAttribute('aria-checked', 'false');
+                }
+            }
+
+            // initialize position
+            updateVisual(checkbox.checked);
+
+            switchContainer.addEventListener('click', function() {
+                const newValue = !checkbox.checked;
+                // optimistic UI
+                checkbox.checked = newValue;
+                updateVisual(newValue);
+
+                fetch("/forms/{{ $form->id }}/accepting", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ accepting_responses: newValue ? 1 : 0 })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        // revert
+                        checkbox.checked = !newValue;
+                        updateVisual(!newValue);
+                        alert('Failed to update');
+                    } else {
+                        closeShareModal();
+                        location.reload();
+                    }
+                })
+                .catch(() => {
+                    checkbox.checked = !newValue;
+                    updateVisual(!newValue);
+                    alert('Failed to update');
+                });
+            });
+        })();
 
         // Form submission handling
         document.getElementById('add-question-form').addEventListener('submit', function(e) {
