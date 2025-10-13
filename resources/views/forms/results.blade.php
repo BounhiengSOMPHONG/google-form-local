@@ -40,7 +40,7 @@
             <div class="mb-6 border-b">
                 <nav class="flex space-x-4" aria-label="Tabs">
                     <button @click.prevent="tab = 'overview'" :class="tab === 'overview' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">Overview</button>
-                    <button @click.prevent="tab = 'individual'" :class="tab === 'individual' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">แนวทางการ</button>
+                    <button @click.prevent="tab = 'individual'" :class="tab === 'individual' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">Guidelines</button>
                 </nav>
             </div>
 
@@ -139,7 +139,7 @@
                                 <button @click="open = !open" class="w-full px-4 py-3 flex items-center justify-between text-left">
                                     <div>
                                         <div class="font-semibold">{{ $response->created_at->format('M d, Y H:i') }}</div>
-                                        <div class="text-sm text-gray-500">ตอบเมื่อ {{ $response->created_at->diffForHumans() }}</div>
+                                        <div class="text-sm text-gray-500">Answered {{ $response->created_at->diffForHumans() }}</div>
                                     </div>
                                     <div class="ml-4">
                                         <svg x-show="!open" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -148,7 +148,7 @@
                                 </button>
 
                                 <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="px-4 pb-4">
-                                    <div class="py-3 text-sm text-gray-600">ส่วนที่ {{ $loop->iteration }} จาก {{ $totalResponses }}</div>
+                                    <div class="py-3 text-sm text-gray-600">Response {{ $loop->iteration }} of {{ $totalResponses }}</div>
                                     <div class="space-y-3">
                                         @foreach($form->questions as $qIndex => $question)
                                             @php
