@@ -24,6 +24,11 @@ class FormController extends Controller
                 $form->save();
             }
         }
+        // If this request is for the forms index route, return the forms listing view.
+        if (request()->routeIs('forms.index')) {
+            return view('forms.index', compact('forms'));
+        }
+
         $surveys = collect(); // Empty collection since surveys are removed
         return view('dashboard', compact('forms', 'surveys'));
     }
