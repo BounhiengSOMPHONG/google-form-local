@@ -30,24 +30,18 @@
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($forms as $form)
-                                <div class="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                                    <div class="p-4">
+                                <div class="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col">
+                                    <a href="{{ route('forms.edit', $form->id) }}" class="block p-4 flex-grow">
                                         <h4 class="font-semibold text-gray-900 mb-2">{{ $form->title }}</h4>
-                                        <p class="text-gray-600 text-sm mb-4">{{ Str::limit($form->description, 100) }}</p>
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-500">
-                                                {{ $form->responses->count() }} responses
-                                            </span>
-                                            <div class="flex space-x-2">
-                                                <a href="{{ route('forms.edit', $form->id) }}" class="text-sm text-brand hover:opacity-90">
-                                                    {{ __('Edit') }}
-                                                </a>
-                                                <!-- View link removed per user request -->
-                                                <a href="{{ route('forms.results', $form->id) }}" class="text-sm text-brand hover:opacity-90">
-                                                    {{ __('Results') }}
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <p class="text-gray-600 text-sm">{{ Str::limit($form->description, 100) }}</p>
+                                    </a>
+                                    <div class="px-4 pb-4 flex items-center justify-between border-t border-gray-100 pt-4">
+                                        <span class="text-sm text-gray-500">
+                                            {{ $form->responses->count() }} responses
+                                        </span>
+                                        <a href="{{ route('forms.results', $form->id) }}" class="text-sm text-brand hover:opacity-90">
+                                            {{ __('Results') }}
+                                        </a>
                                     </div>
                                 </div>
                             @endforeach

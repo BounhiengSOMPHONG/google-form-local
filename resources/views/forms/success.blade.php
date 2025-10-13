@@ -15,9 +15,9 @@
                         <a href="{{ route('forms.public', $form) }}" class="inline-block bg-brand hover:opacity-90 text-brand font-bold py-2 px-4 rounded">Back to form</a>
                         @php $respId = session('response_id'); @endphp
                         @if($respId)
-                            <a href="{{ route('forms.public', $form) }}?response_id={{ $respId }}#edit" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">แก้ไขคำตอบของคุณ</a>
+                            <a href="{{ route('forms.public', $form) }}?response_id={{ $respId }}#edit" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Edit your response</a>
                         @else
-                            <a href="{{ route('forms.public', $form) }}#edit" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">แก้ไขคำตอบของคุณ</a>
+                            <a href="{{ route('forms.public', $form) }}#edit" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Edit your response</a>
                         @endif
                     </div>
                 </div>

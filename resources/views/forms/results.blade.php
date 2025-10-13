@@ -36,7 +36,16 @@
             </div>
         </div>
 
-        @foreach($questionStats as $questionId => $stats)
+        <div x-data="{ tab: 'overview' }">
+            <div class="mb-6 border-b">
+                <nav class="flex space-x-4" aria-label="Tabs">
+                    <button @click.prevent="tab = 'overview'" :class="tab === 'overview' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">Overview</button>
+                    <button @click.prevent="tab = 'individual'" :class="tab === 'individual' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">Guidelines</button>
+                </nav>
+            </div>
+
+            <div x-show="tab === 'overview'" x-cloak>
+                @foreach($questionStats as $questionId => $stats)
             <div class="mb-10 border-b pb-10">
                 <h2 class="text-xl font-bold mb-4 flex items-center">
                     <span>{{ $stats['question']->question_text }}</span>
@@ -112,7 +121,67 @@
                     @endif
                 @endif
             </div>
-        @endforeach
+                @endforeach
+            </div>
+
+            <div x-show="tab === 'individual'" x-cloak>
+                <div class="space-y-4">
+                    @php
+                        $responsesPerPage = 20;
+                        $responses = $form->responses()->latest()->take($responsesPerPage)->get();
+                    @endphp
+
+                    @if($responses->isEmpty())
+                        <p class="text-gray-500">No responses yet.</p>
+                    @else
+                        @foreach($responses as $idx => $response)
+                            <div x-data="{ open: false }" class="bg-white border rounded-lg shadow-sm">
+                                <button @click="open = !open" class="w-full px-4 py-3 flex items-center justify-between text-left">
+                                    <div>
+                                        <div class="font-semibold">{{ $response->created_at->format('M d, Y H:i') }}</div>
+                                        <div class="text-sm text-gray-500">Answered {{ $response->created_at->diffForHumans() }}</div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <svg x-show="!open" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        <svg x-show="open" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                                    </div>
+                                </button>
+
+                                <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="px-4 pb-4">
+                                    <div class="py-3 text-sm text-gray-600">Response {{ $loop->iteration }} of {{ $totalResponses }}</div>
+                                    <div class="space-y-3">
+                                        @foreach($form->questions as $qIndex => $question)
+                                            @php
+                                                $answer = $response->responseAnswers->firstWhere('question_id', $question->id);
+                                                $displayAnswer = '';
+                                                if($answer) {
+                                                    if($question->type === 'checkbox') {
+                                                        $displayAnswer = implode(', ', json_decode($answer->answer, true) ?: []);
+                                                    } else {
+                                                        $displayAnswer = $answer->answer;
+                                                    }
+                                                }
+                                            @endphp
+
+                                            <div class="bg-gray-50 p-3 rounded border">
+                                                <div class="font-medium">{{ $qIndex + 1 }}. {{ $question->question_text }}</div>
+                                                <div class="text-gray-800 mt-1">{{ $displayAnswer ?? '-' }}</div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        @if($form->responses()->count() > $responsesPerPage)
+                            <div class="mt-4 text-center">
+                                <button id="load-more-responses" class="inline-block bg-brand text-white px-4 py-2 rounded">Load More</button>
+                            </div>
+                        @endif
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
         </div>
     </div>

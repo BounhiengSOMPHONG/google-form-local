@@ -108,7 +108,7 @@
                                             <!-- View Form link removed per user request -->
                                             <a href="{{ route('forms.results', $form) }}"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('View Results') }}</a>
-                                            <form method="POST" action="{{ route('forms.destroy', $form) }}" onsubmit="return confirm('ลบแบบฟอร์มนี้หรือไม่?');">
+                                            <form method="POST" action="{{ route('forms.destroy', $form) }}" onsubmit="return confirm('Delete this form?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">{{ __('Delete') }}</button>
