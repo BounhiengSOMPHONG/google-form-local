@@ -39,8 +39,8 @@
         <div x-data="{ tab: 'overview' }">
             <div class="mb-6 border-b">
                 <nav class="flex space-x-4" aria-label="Tabs">
-                    <button @click.prevent="tab = 'overview'" :class="tab === 'overview' ? 'border-b-2 border-brand text-brand' : 'text-gray-600'" class="px-3 py-2 font-medium">Overview</button>
-                    <button @click.prevent="tab = 'individual'" :class="tab === 'individual' ? 'border-b-2 border-brand text-brand' : 'text-gray-600'" class="px-3 py-2 font-medium">แนวทางการ</button>
+                    <button @click.prevent="tab = 'overview'" :class="tab === 'overview' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">Overview</button>
+                    <button @click.prevent="tab = 'individual'" :class="tab === 'individual' ? 'border-b-2 border-brand text-brand font-semibold' : 'text-gray-700 hover:text-brand'" class="px-4 py-3">แนวทางการ</button>
                 </nav>
             </div>
 
@@ -138,7 +138,7 @@
                             <div x-data="{ open: false }" class="bg-white border rounded-lg shadow-sm">
                                 <button @click="open = !open" class="w-full px-4 py-3 flex items-center justify-between text-left">
                                     <div>
-                                        <div class="font-semibold">ต้องการคำที่ {{ $loop->iteration }} | {{ $response->created_at->format('M d, Y H:i') }}</div>
+                                        <div class="font-semibold">{{ $response->created_at->format('M d, Y H:i') }}</div>
                                         <div class="text-sm text-gray-500">ตอบเมื่อ {{ $response->created_at->diffForHumans() }}</div>
                                     </div>
                                     <div class="ml-4">
