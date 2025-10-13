@@ -17,10 +17,36 @@
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <x-input-label for="first_name" :value="__('First Name')" />
+                <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', $user->first_name)" required autofocus autocomplete="given-name" />
+                <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+            </div>
+
+            <div>
+                <x-input-label for="last_name" :value="__('Last Name')" />
+                <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" :value="old('last_name', $user->last_name)" required autocomplete="family-name" />
+                <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+                <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
+                <x-text-input id="date_of_birth" name="date_of_birth" type="date" class="mt-1 block w-full" :value="old('date_of_birth', $user->date_of_birth)" required />
+                <x-input-error class="mt-2" :messages="$errors->get('date_of_birth')" />
+            </div>
+
+            <div>
+                <x-input-label for="gender" :value="__('Gender')" />
+                <select id="gender" name="gender" class="block mt-1 w-full border-gray-300 focus:border-brand focus:ring-brand rounded-md shadow-sm">
+                    <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>Male</option>
+                    <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>Female</option>
+                    <option value="other" {{ old('gender', $user->gender) === 'other' ? 'selected' : '' }}>Other</option>
+                </select>
+                <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+            </div>
         </div>
 
         <div>
