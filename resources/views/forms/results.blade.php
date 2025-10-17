@@ -23,7 +23,6 @@
         }
         .results-content {
             flex: 1;
-            display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
@@ -31,7 +30,6 @@
         }
         .results-grid {
             width: 100%;
-            height: 100%;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
@@ -80,12 +78,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
     </style>
 
     <div class="results-fullscreen">
@@ -118,8 +110,6 @@
 
         <div class="results-content">
             <div class="results-grid">
-
-
                 @foreach($questionStats as $questionId => $stats)
                     <div class="chart-card">
                         <h3 class="text-lg font-bold mb-3 text-gray-800">
@@ -209,26 +199,20 @@
                                 });
                             </script>
                         @else
-                            <div class="flex-1 mt-4 overflow-hidden">
-                                <div class="bg-purple-50 rounded-lg p-4 border border-purple-100 h-full flex flex-col">
-                                    <div class="text-sm font-semibold text-purple-900 mb-3 flex items-center justify-between">
-                                        <span>Responses</span>
-                                        <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">{{ $stats['total_answers'] }}</span>
+                            <div class="flex-1 mt-4">
+                                <div class="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                                    <div class="text-sm font-semibold text-purple-900 mb-3">
+                                        Responses ({{ $stats['total_answers'] }})
                                     </div>
-                                    <div class="space-y-2 overflow-y-auto flex-1" style="max-height: 320px;">
-                                        @php 
-                                            $index = 1;
-                                            $maxResponses = 20; // จำกัดแสดงไม่เกิน 20 คำตอบ
-                                            $responseCount = 0;
-                                        @endphp
+                                    <div class="space-y-2 max-h-48 overflow-y-auto">
+                                        @php $index = 1; @endphp
                                         @foreach($form->responses as $response)
                                             @foreach($response->responseAnswers as $answer)
-                                                @if($answer->question_id == $stats['question']->id && $responseCount < $maxResponses)
-                                                    @php $responseCount++; @endphp
-                                                    <div class="bg-white rounded-lg p-2.5 border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
-                                                        <div class="flex items-start gap-2">
-                                                            <span class="bg-purple-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">{{ $index++ }}</span>
-                                                            <span class="text-gray-800 text-sm break-words flex-1 line-clamp-2">
+                                                @if($answer->question_id == $stats['question']->id)
+                                                    <div class="bg-white rounded p-3 border border-purple-100">
+                                                        <div class="flex items-start">
+                                                            <span class="bg-purple-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">{{ $index++ }}</span>
+                                                            <span class="text-gray-800 text-sm break-words flex-1">
                                                                 @if($stats['question']->type === 'checkbox')
                                                                     {{ implode(', ', json_decode($answer->answer, true) ?: []) }}
                                                                 @else
@@ -240,26 +224,13 @@
                                                 @endif
                                             @endforeach
                                         @endforeach
-                                        
-                                        @if($stats['total_answers'] > $maxResponses)
-                                            <div class="text-center py-2">
-                                                <span class="text-xs text-purple-600 font-medium">
-                                                    + {{ $stats['total_answers'] - $maxResponses }} more responses
-                                                </span>
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
                             
                             @if($stats['total_answers'] === 0)
                                 <div class="flex-1 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                        </svg>
-                                        <p class="text-gray-400 italic text-sm mt-2">No responses yet</p>
-                                    </div>
+                                    <p class="text-gray-400 italic text-sm">No responses yet</p>
                                 </div>
                             @endif
                         @endif
