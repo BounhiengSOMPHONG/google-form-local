@@ -25,9 +25,13 @@
             flex: 1;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            overflow: hidden;
+            padding: 0rem 1rem 4rem 1rem;
+            overflow: auto;
         }
+        .responses-box {
+    max-height: 300px;
+    overflow-y: auto;
+}
         .results-grid {
             width: 100%;
             display: grid;
@@ -46,7 +50,7 @@
             flex-direction: column;
             transition: transform 0.3s ease;
             max-height: 500px;
-            overflow: hidden;
+            overflow: auto;
         }
         .chart-card:hover {
             transform: translateY(-5px);
@@ -204,7 +208,7 @@
                                     <div class="text-sm font-semibold text-purple-900 mb-3">
                                         Responses ({{ $stats['total_answers'] }})
                                     </div>
-                                    <div class="space-y-2 max-h-48 overflow-y-auto">
+                                    <div class="responses-box space-y-2 max-h-48 overflow-y-auto">
                                         @php $index = 1; @endphp
                                         @foreach($form->responses as $response)
                                             @foreach($response->responseAnswers as $answer)
