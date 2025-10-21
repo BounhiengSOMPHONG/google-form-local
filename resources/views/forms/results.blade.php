@@ -12,102 +12,131 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             overflow: hidden;
         }
         .results-header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         .results-content {
             flex: 1;
             align-items: center;
             justify-content: center;
-            padding: 0rem 1rem 4rem 1rem;
+            padding: 1rem;
             overflow: auto;
         }
         .responses-box {
-    max-height: 300px;
-    overflow-y: auto;
-}
+            max-height: 300px;
+            overflow-y: auto;
+        }
         .results-grid {
             width: 100%;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
-            overflow-y: auto;
             padding: 1rem;
         }
         .chart-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--lifted-shadow);
             display: flex;
             flex-direction: column;
             transition: transform 0.3s ease;
-            max-height: 500px;
-            overflow: auto;
+            border: 1px solid rgba(255, 213, 0, 0.1);
         }
         .chart-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
         }
         .stats-bar {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-bottom: 1rem;
         }
         .stat-card {
             background: rgba(255, 255, 255, 0.95);
-            padding: 1rem;
-            border-radius: 0.75rem;
+            backdrop-filter: blur(10px);
+            padding: 1.25rem;
+            border-radius: 1rem;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--soft-shadow);
+            border: 1px solid rgba(255, 213, 0, 0.1);
+        }
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 0.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.2);
         }
     </style>
 
     <div class="results-fullscreen">
         <div class="results-header">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">{{ $form->title }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $form->title }}</h1>
                     <p class="text-sm text-gray-600">Results Dashboard</p>
                 </div>
-                <a href="{{ route('forms.export', $form->id) }}" class="bg-brand hover:opacity-90 text-brand font-bold py-2 px-6 rounded-lg shadow-lg transition">
+                <a href="{{ route('forms.export', $form->id) }}" class="btn-primary inline-flex items-center px-6 py-2 rounded-xl font-semibold shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
                     Export CSV
                 </a>
             </div>
             
             <div class="stats-bar mt-4">
                 <div class="stat-card">
-                    <p class="text-3xl font-bold text-purple-600">{{ $totalResponses }}</p>
-                    <p class="text-sm text-gray-600">Total Responses</p>
+                    <div class="icon bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ $totalResponses }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Total Responses</p>
                 </div>
                 <div class="stat-card">
-                    <p class="text-3xl font-bold text-purple-600">{{ $form->questions->count() }}</p>
-                    <p class="text-sm text-gray-600">Questions</p>
+                    <div class="icon bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ $form->questions->count() }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Questions</p>
                 </div>
                 <div class="stat-card">
-                    <p class="text-xl font-bold text-purple-600">{{ $form->created_at->format('M d, Y') }}</p>
-                    <p class="text-sm text-gray-600">Created</p>
+                    <div class="icon bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xl font-bold text-gray-900">{{ $form->created_at->format('M d, Y') }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Created</p>
                 </div>
             </div>
         </div>
@@ -116,12 +145,14 @@
             <div class="results-grid">
                 @foreach($questionStats as $questionId => $stats)
                     <div class="chart-card">
-                        <h3 class="text-lg font-bold mb-3 text-gray-800">
-                            {{ $stats['question']->question_text }}
-                        </h3>
-                        <span class="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 mb-3 inline-block">
-                            {{ ucfirst(str_replace('_', ' ', $stats['question']->type)) }}
-                        </span>
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-bold text-gray-900 flex-1 pr-2">
+                                {{ $stats['question']->question_text }}
+                            </h3>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 whitespace-nowrap">
+                                {{ ucfirst(str_replace('_', ' ', $stats['question']->type)) }}
+                            </span>
+                        </div>
 
                         @if(in_array($stats['question']->type, ['radio', 'checkbox', 'dropdown']))
                             <div class="flex-1 flex items-center justify-center my-4">
@@ -136,9 +167,9 @@
 
                                 @foreach($displayOptions as $index => $option)
                                     @php $data = $stats['answers'][$option] ?? ['count' => 0, 'percentage' => 0]; @endphp
-                                    <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center justify-between text-sm">
                                         <div class="flex items-center flex-1 min-w-0">
-                                            <span class="w-3 h-3 rounded-full mr-2 flex-shrink-0" style="background-color: {{ $colors[$index % count($colors)] }}"></span>
+                                            <span class="w-3 h-3 rounded-full mr-2 flex-shrink-0" style="background-color: {{ $colors[$index % count($colors)] }};"></span>
                                             <span class="text-gray-700 truncate">{{ $option }}</span>
                                         </div>
                                         <span class="font-semibold text-gray-800 ml-2 whitespace-nowrap">{{ $data['count'] }} ({{ $data['percentage'] }}%)</span>
@@ -204,8 +235,8 @@
                             </script>
                         @else
                             <div class="flex-1 mt-4">
-                                <div class="bg-purple-50 rounded-lg p-4 border border-purple-100">
-                                    <div class="text-sm font-semibold text-purple-900 mb-3">
+                                <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
+                                    <div class="text-sm font-semibold text-yellow-900 mb-3">
                                         Responses ({{ $stats['total_answers'] }})
                                     </div>
                                     <div class="responses-box space-y-2 max-h-48 overflow-y-auto">
@@ -213,9 +244,9 @@
                                         @foreach($form->responses as $response)
                                             @foreach($response->responseAnswers as $answer)
                                                 @if($answer->question_id == $stats['question']->id)
-                                                    <div class="bg-white rounded p-3 border border-purple-100">
+                                                    <div class="bg-white rounded-lg p-3 border border-yellow-100 shadow-sm">
                                                         <div class="flex items-start">
-                                                            <span class="bg-purple-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2 flex-shrink-0">{{ $index++ }}</span>
+                                                            <span class="bg-yellow-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">{{ $index++ }}</span>
                                                             <span class="text-gray-800 text-sm break-words flex-1">
                                                                 @if($stats['question']->type === 'checkbox')
                                                                     {{ implode(', ', json_decode($answer->answer, true) ?: []) }}
@@ -233,8 +264,13 @@
                             </div>
                             
                             @if($stats['total_answers'] === 0)
-                                <div class="flex-1 flex items-center justify-center">
-                                    <p class="text-gray-400 italic text-sm">No responses yet</p>
+                                <div class="flex-1 flex items-center justify-center py-8">
+                                    <div class="text-center">
+                                        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.291-1.1-5.291-2.709M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                        </svg>
+                                        <p class="text-gray-500 italic">No responses yet</p>
+                                    </div>
                                 </div>
                             @endif
                         @endif
