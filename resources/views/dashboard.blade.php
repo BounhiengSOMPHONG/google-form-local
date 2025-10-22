@@ -18,11 +18,11 @@
         </div>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-4 sm:py-6">
+        <div class="w-full max-w-[98%] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
             <!-- Hero Section -->
-            <div class="mb-12 p-8 rounded-2xl bg-gradient-to-r from-brand-yellow to-yellow-200 shadow-lg">
-                <div class="max-w-3xl">
+            <div class="mb-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-brand-yellow to-yellow-200 shadow-lg">
+                <div class="max-w-none">
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-fade-in-up">Welcome back, {{ Auth::user()->first_name ?? 'User' }}!</h1>
                     <p class="text-gray-800 text-lg mb-6 animate-fade-in-up" style="animation-delay: 0.1s;">Create, manage, and analyze your surveys with ease. Start building your next form today.</p>
                     <div class="flex flex-wrap gap-4 animate-fade-in-up" style="animation-delay: 0.2s;">
@@ -43,7 +43,7 @@
             </div>
 
             <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
                 <div class="bg-white overflow-hidden card-gradient-alt card-shadow rounded-xl p-6 card-hover">
                     <div class="flex items-center">
                         <div class="p-3 rounded-xl bg-card-yellow-50 shadow-sm">
@@ -97,11 +97,11 @@
                 </div>
                 
                 @if($forms->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         @foreach($forms as $form)
-                            <div class="bg-white border border-gray-200 rounded-xl card-shadow card-hover transition-all duration-300 overflow-hidden">
-                                <a href="{{ route('forms.edit', $form) }}" class="block hover:no-underline text-inherit">
-                                    <div class="p-6">
+                            <div class="bg-white border border-gray-200 rounded-xl card-shadow card-hover transition-all duration-300 overflow-hidden h-full flex flex-col">
+                                <a href="{{ route('forms.edit', $form) }}" class="block hover:no-underline text-inherit flex-grow">
+                                    <div class="p-5 sm:p-6">
                                         <h4 class="font-bold text-gray-900 text-lg mb-2 truncate" title="{{ $form->title }}">{{ $form->title }}</h4>
                                         <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ Str::limit($form->description, 100) }}</p>
                                         <div class="flex items-center justify-between text-sm">
