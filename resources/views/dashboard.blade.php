@@ -99,7 +99,7 @@
                 @if($forms->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         @foreach($forms as $form)
-                            <div class="bg-white border border-gray-200 rounded-xl card-shadow card-hover transition-all duration-300 overflow-hidden h-full flex flex-col">
+                            <div class="bg-white border border-gray-200 rounded-xl card-shadow card-hover transition-all duration-300 overflow-visible h-full flex flex-col">
                                 <a href="{{ route('forms.edit', $form) }}" class="block hover:no-underline text-inherit flex-grow">
                                     <div class="p-5 sm:p-6">
                                         <h4 class="font-bold text-gray-900 text-lg mb-2 truncate" title="{{ $form->title }}">{{ $form->title }}</h4>
