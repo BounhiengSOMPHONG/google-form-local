@@ -3,17 +3,15 @@
         body, html {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            overflow-x: hidden; /* Allow vertical scrolling but prevent horizontal */
+            min-height: 100vh;
         }
         .results-fullscreen {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            overflow: hidden;
         }
         .results-header {
             background: rgba(255, 255, 255, 0.95);
@@ -21,17 +19,21 @@
             padding: 1rem 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         .results-content {
             flex: 1;
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            overflow: auto;
+            overflow: visible; /* Allow content to scroll naturally */
         }
         .responses-box {
             max-height: 300px;
             overflow-y: auto;
+            margin-top: 0.5rem;
         }
         .results-grid {
             width: 100%;
@@ -39,6 +41,7 @@
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             padding: 1rem;
+            max-width: 100vw;
         }
         .chart-card {
             background: rgba(255, 255, 255, 0.95);
