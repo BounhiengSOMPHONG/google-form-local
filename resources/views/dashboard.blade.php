@@ -1,22 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-            <div>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ __('Dashboard') }}
-                </h2>
-                <p class="text-gray-600 text-sm mt-1">Manage your forms</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <a href="{{ route('forms.create') }}" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-brand uppercase tracking-widest hover:opacity-90 focus:opacity-90 active:opacity-95 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    {{ __('Create Form') }}
-                </a>
-            </div>
-        </div>
-    </x-slot>
 
     <div class="py-4 sm:py-6">
         <div class="w-full max-w-[98%] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
