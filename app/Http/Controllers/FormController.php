@@ -178,4 +178,21 @@ class FormController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function addSection(Request $request, Form $form)
+    {
+        $highestPosition = $form->questions()->max('position');
+        $position = $highestPosition !== null ? $highestPosition + 1 : 1;
+
+        $section = Question::create([
+            'form_id' => $form->id,
+            'question_text' => 'Untitled Section',
+            'description' => 'Section description',
+            'type' => 'section',
+            'required' => false,
+            'position' => $position,
+        ]);
+
+        return response()->json($section);
+    }
 }

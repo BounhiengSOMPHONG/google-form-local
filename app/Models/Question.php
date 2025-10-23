@@ -16,6 +16,7 @@ class Question extends Model
         'required',
         'options',
         'position',
+        'description',
     ];
 
     protected $casts = [

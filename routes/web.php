@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/forms/{form}/questions/{question}', [FormController::class, 'updateQuestion'])->name('forms.questions.update');
     Route::delete('/forms/{form}/questions/{question}', [FormController::class, 'deleteQuestion'])->name('forms.questions.delete');
     Route::post('/forms/{form}/reorder', [FormController::class, 'reorderQuestions'])->name('forms.questions.reorder');
+    Route::post('/forms/{form}/sections', [FormController::class, 'addSection'])->name('forms.sections.add');
     Route::post('/forms/{form}/accepting', [FormController::class, 'setAccepting'])->name('forms.setAccepting');
     
     // Analytics
