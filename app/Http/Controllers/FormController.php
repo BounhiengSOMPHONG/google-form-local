@@ -156,7 +156,7 @@ class FormController extends Controller
             ]);
         }
 
-        return redirect()->route('forms.edit', $form->id)->with('success', 'Item updated successfully!');
+        return response()->json($question->fresh());
     }
 
     public function deleteQuestion(Form $form, Question $question)
