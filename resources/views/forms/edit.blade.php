@@ -298,8 +298,47 @@
                     </div>
                 </div>
 
-                {{-- Share Modal and other modals remain unchanged --}}
-                <div id="share-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">...</div>
+                <!-- Share Modal -->
+                <div id="share-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+                    <div class="flex items-center justify-center min-height-screen pt-10 pb-20 px-4">
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl transform transition-all">
+                            <div class="p-6">
+                                <div class="flex justify-between items-center pb-4 border-b">
+                                    <h3 class="text-lg font-bold text-gray-900">Share Form</h3>
+                                    <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-gray-600 mb-4">Anyone with the link can view and submit this form.</p>
+                                    <div class="mb-6">
+                                        <label class="block text-gray-700 text-sm font-medium mb-2">Share Link</label>
+                                        <div class="flex">
+                                            <input type="text" id="share-link" readonly value="{{ route('forms.public', $form) }}" 
+                                                   class="flex-1 px-4 py-3 border border-gray-300 rounded-l-xl focus:ring-2 focus:ring-brand focus:border-transparent">
+                                            <button onclick="copyToClipboard()" class="btn-primary px-6 py-3 rounded-r-xl font-semibold">
+                                                Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-medium mb-2">Accepting Responses</label>
+                                        <div class="flex items-center">
+                                            <div id="accepting-switch" class="relative inline-flex items-center cursor-pointer w-14 h-8" role="switch" aria-checked="{{ $form->accepting_responses ? 'true' : 'false' }}">
+                                                <input id="accepting-checkbox" type="checkbox" class="sr-only peer" {{ $form->accepting_responses ? 'checked' : '' }}>
+                                                <div class="peer w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-yellow-400"></div>
+                                            </div>
+                                            <span id="accepting-label" class="ml-3 text-sm text-gray-700">{{ $form->accepting_responses ? 'Open' : 'Closed' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
