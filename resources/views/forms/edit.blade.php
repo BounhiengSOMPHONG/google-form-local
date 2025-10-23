@@ -442,7 +442,17 @@
         function updateEditOptionsList() { /* ... */ }
         function showShareModal() { document.getElementById('share-modal').classList.remove('hidden'); }
         function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
-        function copyToClipboard() { /* ... */ }
+                function copyToClipboard() {
+            const linkInput = document.getElementById('share-link');
+            linkInput.select();
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+                const button = linkInput.nextElementSibling;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
         // Drag and drop, etc.
     </script>
 </x-app-layout>
