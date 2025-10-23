@@ -45,82 +45,91 @@
                             <input type="hidden" name="response_id" value="{{ $responseId }}">
                         @endif
 
-                        @foreach($questions as $question)
-                            <div class="mb-8 p-6 bg-white rounded-xl card-shadow transition-all duration-300">
-                                <div class="flex justify-between items-start mb-4">
-                                    <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
-                                        {{ $question->question_text }}
-                                        @if($question->required)
-                                            <span class="text-red-500">*</span>
-                                        @endif
-                                    </label>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        {{ ucfirst(str_replace('_', ' ', $question->type)) }}
-                                    </span>
+                                                @foreach($questions as $question)
+                            @if($question->type === 'section')
+                                <div class="mb-8 pt-6">
+                                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-3">{{ $question->question_text }}</h2>
+                                    @if($question->description)
+                                        <p class="text-gray-600 mt-3">{{ $question->description }}</p>
+                                    @endif
                                 </div>
-
-                                @error('question_' . $question->id)
-                                    <p class="text-red-500 text-sm italic mb-4">{{ $message }}</p>
-                                @enderror
-
-                                @if($question->type === 'short_text')
-                                    <input type="text" 
-                                           name="question_{{ $question->id }}" 
-                                           id="question_{{ $question->id }}"
-                                           value="{{ old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') }}"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                           @if($question->required) required @endif>
-                                @elseif($question->type === 'radio')
-                                    <div class="space-y-3">
-                                        @foreach($question->options as $option)
-                                            <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
-                                                <input type="radio" 
-                                                       name="question_{{ $question->id }}" 
-                                                       id="question_{{ $question->id }}_{{ $loop->index }}"
-                                                       value="{{ $option }}"
-                                                       {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
-                                                       class="h-4 w-4 text-yellow-600 focus:ring-yellow-500"
-                                                       @if($question->required) required @endif>
-                                                <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
-                                                    {{ $option }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                            @else
+                                <div class="mb-8 p-6 bg-white rounded-xl card-shadow transition-all duration-300">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
+                                            {{ $question->question_text }}
+                                            @if($question->required)
+                                                <span class="text-red-500">*</span>
+                                            @endif
+                                        </label>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            {{ ucfirst(str_replace('_', ' ', $question->type)) }}
+                                        </span>
                                     </div>
-                                @elseif($question->type === 'checkbox')
-                                    <div class="space-y-3">
-                                        @foreach($question->options as $option)
-                                            <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
-                                                <input type="checkbox" 
-                                                       name="question_{{ $question->id }}[]" 
-                                                       id="question_{{ $question->id }}_{{ $loop->index }}"
-                                                       value="{{ $option }}"
-                                                       {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
-                                                       class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 rounded">
-                                                <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
-                                                    {{ $option }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @elseif($question->type === 'dropdown')
-                                    <select name="question_{{ $question->id }}" 
-                                            id="question_{{ $question->id }}"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                            @if($question->required) required @endif>
-                                        <option value="">Select an option</option>
-                                        @foreach($question->options as $option)
-                                            <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
-                                        @endforeach>
-                                    </select>
-                                @elseif($question->type === 'date')
-                                    <input type="date" 
-                                           name="question_{{ $question->id }}" 
-                                           id="question_{{ $question->id }}"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                           @if($question->required) required @endif>
-                                @endif
-                            </div>
+
+                                    @error('question_' . $question->id)
+                                        <p class="text-red-500 text-sm italic mb-4">{{ $message }}</p>
+                                    @enderror
+
+                                    @if($question->type === 'short_text')
+                                        <input type="text" 
+                                               name="question_{{ $question->id }}" 
+                                               id="question_{{ $question->id }}"
+                                               value="{{ old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') }}"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                               @if($question->required) required @endif>
+                                    @elseif($question->type === 'radio')
+                                        <div class="space-y-3">
+                                            @foreach($question->options as $option)
+                                                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
+                                                    <input type="radio" 
+                                                           name="question_{{ $question->id }}" 
+                                                           id="question_{{ $question->id }}_{{ $loop->index }}"
+                                                           value="{{ $option }}"
+                                                           {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
+                                                           class="h-4 w-4 text-yellow-600 focus:ring-yellow-500"
+                                                           @if($question->required) required @endif>
+                                                    <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
+                                                        {{ $option }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @elseif($question->type === 'checkbox')
+                                        <div class="space-y-3">
+                                            @foreach($question->options as $option)
+                                                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
+                                                    <input type="checkbox" 
+                                                           name="question_{{ $question->id }}[]" 
+                                                           id="question_{{ $question->id }}_{{ $loop->index }}"
+                                                           value="{{ $option }}"
+                                                           {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
+                                                           class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 rounded">
+                                                    <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
+                                                        {{ $option }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @elseif($question->type === 'dropdown')
+                                        <select name="question_{{ $question->id }}" 
+                                                id="question_{{ $question->id }}"
+                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                                @if($question->required) required @endif>
+                                            <option value="">Select an option</option>
+                                            @foreach($question->options as $option)
+                                                <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    @elseif($question->type === 'date')
+                                        <input type="date" 
+                                               name="question_{{ $question->id }}" 
+                                               id="question_{{ $question->id }}"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                               @if($question->required) required @endif>
+                                    @endif
+                                </div>
+                            @endif
                         @endforeach
 
                         <div class="flex items-center justify-center mt-10">

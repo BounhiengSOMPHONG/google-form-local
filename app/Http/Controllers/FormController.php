@@ -122,26 +122,41 @@ class FormController extends Controller
 
     public function updateQuestion(Request $request, Form $form, Question $question)
     {
-        if ($request->has('options') && is_string($request->options)) {
-            $request->merge(['options' => json_decode($request->options, true) ?? []]);
+        // The type of the question doesn't change during an update.
+        // We use the existing question's type to decide on validation rules.
+        $type = $question->type;
+
+        if ($type === 'section') {
+            $validated = $request->validate([
+                'question_text' => 'required|string|max:255', // Section Title
+                'description' => 'nullable|string',
+            ]);
+
+            $question->update($validated);
+
+        } else {
+            // This is a regular question
+            if ($request->has('options') && is_string($request->options)) {
+                $request->merge(['options' => json_decode($request->options, true) ?? []]);
+            }
+
+            $validated = $request->validate([
+                'question_text' => 'required|string',
+                'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date'])],
+                'required' => 'boolean',
+                'options' => 'nullable|array',
+                'options.*' => 'string',
+            ]);
+
+            $question->update([
+                'question_text' => $validated['question_text'],
+                'type' => $validated['type'],
+                'required' => $request->required ?? false,
+                'options' => in_array($validated['type'], ['radio', 'checkbox', 'dropdown']) ? ($validated['options'] ?? null) : null,
+            ]);
         }
 
-        $request->validate([
-            'question_text' => 'required|string',
-            'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date'])],
-            'required' => 'boolean',
-            'options' => 'nullable|array',
-            'options.*' => 'string',
-        ]);
-
-        $question->update([
-            'question_text' => $request->question_text,
-            'type' => $request->type,
-            'required' => $request->required ?? false,
-            'options' => $request->type !== 'short_text' && $request->type !== 'date' ? $request->options : null,
-        ]);
-
-        return redirect()->route('forms.edit', $form->id)->with('success', 'Question updated successfully!');
+        return redirect()->route('forms.edit', $form->id)->with('success', 'Item updated successfully!');
     }
 
     public function deleteQuestion(Form $form, Question $question)
