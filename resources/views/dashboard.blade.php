@@ -25,7 +25,7 @@
             </div>
 
             <!-- Summary Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div class="bg-white overflow-hidden card-gradient-alt card-shadow rounded-xl p-6 card-hover">
                     <div class="flex items-center">
                         <div class="p-3 rounded-xl bg-card-yellow-50 shadow-sm">
@@ -79,7 +79,7 @@
                 </div>
                 
                 @if($forms->count() > 0)
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                         @foreach($forms as $form)
                             <div class="bg-white border border-gray-200 rounded-xl card-shadow card-hover transition-all duration-300 overflow-visible h-full flex flex-col">
                                 <a href="{{ route('forms.edit', $form) }}" class="block hover:no-underline text-inherit flex-grow">
