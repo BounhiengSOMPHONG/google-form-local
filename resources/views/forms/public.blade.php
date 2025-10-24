@@ -39,108 +39,187 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('forms.submit', $form) }}" method="POST">
+                    <form action="{{ route('forms.submit', $form) }}" method="POST" id="multi-step-form">
                         @csrf
                         @if(isset($responseId) && $responseId)
                             <input type="hidden" name="response_id" value="{{ $responseId }}">
                         @endif
 
-                                                @foreach($questions as $question)
-                            @if($question->type === 'section')
-                                <div class="mb-8 pt-6">
-                                    <h2 class="text-2xl font-bold text-gray-800 border-b pb-3">{{ $question->question_text }}</h2>
-                                    @if($question->description)
-                                        <p class="text-gray-600 mt-3">{{ $question->description }}</p>
-                                    @endif
-                                </div>
-                            @else
-                                <div class="mb-8 p-6 bg-white rounded-xl card-shadow transition-all duration-300">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
-                                            {{ $question->question_text }}
-                                            @if($question->required)
-                                                <span class="text-red-500">*</span>
-                                            @endif
-                                        </label>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            {{ ucfirst(str_replace('_', ' ', $question->type)) }}
-                                        </span>
+                        <!-- Questions organized by sections -->
+                        <div id="sections-container">
+                            @php
+                                $sections = [];
+                                $currentSection = null;
+                                $sectionIndex = 0;
+                                
+                                foreach($questions as $question) {
+                                    if($question->type === 'section') {
+                                        if($currentSection !== null) {
+                                            $sections[] = $currentSection;
+                                        }
+                                        $currentSection = [
+                                            'title' => $question->question_text,
+                                            'description' => $question->description,
+                                            'questions' => [],
+                                            'index' => $sectionIndex++
+                                        ];
+                                    } else {
+                                        if($currentSection === null) {
+                                            $currentSection = [
+                                                'title' => 'General Questions',
+                                                'description' => 'Please answer the following questions.',
+                                                'questions' => [],
+                                                'index' => $sectionIndex++
+                                            ];
+                                        }
+                                        $currentSection['questions'][] = $question;
+                                    }
+                                }
+                                
+                                if($currentSection !== null) {
+                                    $sections[] = $currentSection;
+                                }
+                            @endphp
+
+                            @foreach($sections as $section)
+                                <div class="section-wrapper" id="section-{{ $section['index'] }}" style="{{ $loop->first ? '' : 'display: none;' }}">
+                                    <!-- Section Header -->
+                                    <div class="mb-8 pt-6">
+                                        <h2 class="text-2xl font-bold text-gray-800 border-b pb-3">{{ $section['title'] }}</h2>
+                                        @if($section['description'])
+                                            <p class="text-gray-600 mt-3">{{ $section['description'] }}</p>
+                                        @endif
                                     </div>
 
-                                    @error('question_' . $question->id)
-                                        <p class="text-red-500 text-sm italic mb-4">{{ $message }}</p>
-                                    @enderror
+                                    <!-- Section Questions -->
+                                    @foreach($section['questions'] as $question)
+                                        <div class="mb-8 p-6 bg-white rounded-xl card-shadow transition-all duration-300">
+                                            <div class="flex justify-between items-start mb-4">
+                                                <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
+                                                    {{ $question->question_text }}
+                                                    @if($question->required)
+                                                        <span class="text-red-500">*</span>
+                                                    @endif
+                                                </label>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                    {{ ucfirst(str_replace('_', ' ', $question->type)) }}
+                                                </span>
+                                            </div>
 
-                                    @if($question->type === 'short_text')
-                                        <input type="text" 
-                                               name="question_{{ $question->id }}" 
-                                               id="question_{{ $question->id }}"
-                                               value="{{ old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') }}"
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                               @if($question->required) required @endif>
-                                    @elseif($question->type === 'radio')
-                                        <div class="space-y-3">
-                                            @foreach($question->options as $option)
-                                                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
-                                                    <input type="radio" 
-                                                           name="question_{{ $question->id }}" 
-                                                           id="question_{{ $question->id }}_{{ $loop->index }}"
-                                                           value="{{ $option }}"
-                                                           {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
-                                                           class="h-4 w-4 text-yellow-600 focus:ring-yellow-500"
-                                                           @if($question->required) required @endif>
-                                                    <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
-                                                        {{ $option }}
-                                                    </label>
+                                            @error('question_' . $question->id)
+                                                <p class="text-red-500 text-sm italic mb-4">{{ $message }}</p>
+                                            @enderror
+
+                                            @if($question->type === 'short_text')
+                                                <input type="text" 
+                                                       name="question_{{ $question->id }}" 
+                                                       id="question_{{ $question->id }}"
+                                                       value="{{ old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') }}"
+                                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                                       @if($question->required) required @endif>
+                                            @elseif($question->type === 'radio')
+                                                <div class="space-y-3">
+                                                    @foreach($question->options as $option)
+                                                        <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
+                                                            <input type="radio" 
+                                                                   name="question_{{ $question->id }}" 
+                                                                   id="question_{{ $question->id }}_{{ $loop->index }}"
+                                                                   value="{{ $option }}"
+                                                                   {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
+                                                                   class="h-4 w-4 text-yellow-600 focus:ring-yellow-500"
+                                                                   @if($question->required) required @endif>
+                                                            <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
+                                                                {{ $option }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach>
                                                 </div>
-                                            @endforeach
-                                        </div>
-                                    @elseif($question->type === 'checkbox')
-                                        <div class="space-y-3">
-                                            @foreach($question->options as $option)
-                                                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
-                                                    <input type="checkbox" 
-                                                           name="question_{{ $question->id }}[]" 
-                                                           id="question_{{ $question->id }}_{{ $loop->index }}"
-                                                           value="{{ $option }}"
-                                                           {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
-                                                           class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 rounded">
-                                                    <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
-                                                        {{ $option }}
-                                                    </label>
+                                            @elseif($question->type === 'checkbox')
+                                                <div class="space-y-3">
+                                                    @foreach($question->options as $option)
+                                                        <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
+                                                            <input type="checkbox" 
+                                                                   name="question_{{ $question->id }}[]" 
+                                                                   id="question_{{ $question->id }}_{{ $loop->index }}"
+                                                                   value="{{ $option }}"
+                                                                   {{ in_array($option, (array) old('question_' . $question->id, $prefill['question_' . $question->id] ?? [])) ? 'checked' : '' }}
+                                                                   class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 rounded">
+                                                            <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
+                                                                {{ $option }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach>
                                                 </div>
-                                            @endforeach
+                                            @elseif($question->type === 'dropdown')
+                                                <select name="question_{{ $question->id }}" 
+                                                        id="question_{{ $question->id }}"
+                                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                                        @if($question->required) required @endif>
+                                                    <option value="">Select an option</option>
+                                                    @foreach($question->options as $option)
+                                                        <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
+                                                    @endforeach>
+                                                </select>
+                                            @elseif($question->type === 'date')
+                                                <input type="date" 
+                                                       name="question_{{ $question->id }}" 
+                                                       id="question_{{ $question->id }}"
+                                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
+                                                       @if($question->required) required @endif>
+                                            @endif
                                         </div>
-                                    @elseif($question->type === 'dropdown')
-                                        <select name="question_{{ $question->id }}" 
-                                                id="question_{{ $question->id }}"
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                                @if($question->required) required @endif>
-                                            <option value="">Select an option</option>
-                                            @foreach($question->options as $option)
-                                                <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    @elseif($question->type === 'date')
-                                        <input type="date" 
-                                               name="question_{{ $question->id }}" 
-                                               id="question_{{ $question->id }}"
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-400 transition duration-200"
-                                               @if($question->required) required @endif>
-                                    @endif
+                                    @endforeach
+
+                                    <!-- Navigation buttons for this section -->
+                                    <div class="flex justify-between mt-10">
+                                        @if($loop->first)
+                                            <div></div> <!-- Empty div for alignment -->
+                                        @else
+                                            <button type="button" class="btn-secondary px-6 py-3 rounded-xl font-semibold" onclick="showSection({{ $section['index'] - 1 }})">
+                                                <span class="flex items-center">
+                                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                                    </svg>
+                                                    Previous
+                                                </span>
+                                            </button>
+                                        @endif
+
+                                        @if($loop->last)
+                                            <button type="submit" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
+                                                <span class="flex items-center">
+                                                    Submit Form
+                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn-primary px-6 py-3 rounded-xl font-semibold" onclick="showSection({{ $section['index'] + 1 }})">
+                                                <span class="flex items-center">
+                                                    Next
+                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
-                            @endif
-                        @endforeach
-
-                        <div class="flex items-center justify-center mt-10">
-                            <button type="submit" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
-                                <span class="flex items-center">
-                                    Submit Form
-                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Hidden section to show when form is submitted successfully -->
+                        <div id="final-section" style="display: none;">
+                            <div class="text-center py-12">
+                                <div class="inline-block p-6 rounded-full bg-green-100 mb-6">
+                                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                </span>
-                            </button>
+                                </div>
+                                <h2 class="text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h2>
+                                <p class="text-gray-600">Thank you for completing this form.</p>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -149,47 +228,100 @@
     </div>
 
     <script>
-        // Update progress bar based on form completion
+        let currentSectionIndex = 0;
+        const totalSections = {{ count($sections) }};
+
+        // Initialize the first section
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
+            updateProgressBar();
             
-            // Calculate total number of required questions
+            // Add event listeners for form inputs to update progress
+            const form = document.getElementById('multi-step-form');
+            form.addEventListener('input', updateProgressBar);
+            form.addEventListener('change', updateProgressBar);
+        });
+
+        function showSection(sectionIndex) {
+            // Validate current section before navigating to the next section
+            if (sectionIndex > currentSectionIndex) {
+                if (!validateCurrentSection()) {
+                    alert('Please fill in all required fields in the current section before proceeding.');
+                    return;
+                }
+            }
+
+            // Hide all sections
+            const sections = document.querySelectorAll('.section-wrapper');
+            sections.forEach((section, index) => {
+                section.style.display = 'none';
+            });
+
+            // Show the requested section
+            document.getElementById('section-' + sectionIndex).style.display = 'block';
+            currentSectionIndex = sectionIndex;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        function validateCurrentSection() {
+            const currentSection = document.getElementById('section-' + currentSectionIndex);
+            const requiredInputs = currentSection.querySelectorAll('input[required], select[required], textarea[required]');
+            let allValid = true;
+            
+            requiredInputs.forEach(input => {
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    const checked = currentSection.querySelectorAll(`input[name="${name}"]:checked`);
+                    if (checked.length === 0) allValid = false;
+                } else if (input.type === 'checkbox') {
+                    // For checkbox arrays
+                    const name = input.name.replace('[]', '');
+                    const checked = currentSection.querySelectorAll(`input[name="${name}[]"]:checked`);
+                    if (input.required && checked.length === 0) allValid = false;
+                } else {
+                    // For text inputs, selects, etc.
+                    if (input.required && input.value.trim() === '') allValid = false;
+                }
+            });
+            
+            return allValid;
+        }
+
+        // Update progress bar based on sections completed
+        function updateProgressBar() {
+            // Calculate total number of required questions across all sections
+            const form = document.getElementById('multi-step-form');
             const requiredInputs = form.querySelectorAll('input[required], select[required], textarea[required]');
             const totalRequired = requiredInputs.length;
             
-            // Calculate how many required questions have been answered
-            function updateProgress() {
-                let answered = 0;
-                
-                requiredInputs.forEach(input => {
-                    if (input.type === 'radio' || input.type === 'checkbox') {
-                        const name = input.name;
-                        const checked = form.querySelectorAll(`input[name="${name}"]:checked`);
-                        if (checked.length > 0) answered++;
-                    } else if (input.type === 'checkbox') {
-                        // For checkbox arrays
-                        const name = input.name.replace('[]', '');
-                        const checked = form.querySelectorAll(`input[name="${name}[]"]:checked`);
-                        if (checked.length > 0) answered++;
-                    } else {
-                        // For text inputs, selects, etc.
-                        if (input.value.trim() !== '') answered++;
-                    }
-                });
-                
-                const percentage = totalRequired > 0 ? Math.round((answered / totalRequired) * 100) : 0;
-                progressBar.style.width = percentage + '%';
-                progressText.textContent = percentage + '%';
+            if (totalRequired === 0) {
+                document.getElementById('progress-bar').style.width = '0%';
+                document.getElementById('progress-text').textContent = '0%';
+                return;
             }
             
-            // Listen for changes on form elements
-            form.addEventListener('input', updateProgress);
-            form.addEventListener('change', updateProgress);
+            // Calculate how many required questions have been answered
+            let answered = 0;
+            requiredInputs.forEach(input => {
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    const checked = form.querySelectorAll(`input[name="${name}"]:checked`);
+                    if (checked.length > 0) answered++;
+                } else if (input.type === 'checkbox') {
+                    // For checkbox arrays
+                    const name = input.name.replace('[]', '');
+                    const checked = form.querySelectorAll(`input[name="${name}[]"]:checked`);
+                    if (checked.length > 0) answered++;
+                } else {
+                    // For text inputs, selects, etc.
+                    if (input.value.trim() !== '') answered++;
+                }
+            });
             
-            // Initial update
-            updateProgress();
-        });
+            const percentage = Math.round((answered / totalRequired) * 100);
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
     </script>
 </x-public-layout>
