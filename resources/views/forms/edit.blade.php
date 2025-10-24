@@ -469,12 +469,86 @@
             }, 3000);
         }
 
-        function toggleOptions(type) { /* ... */ }
-        function toggleEditOptions(type) { /* ... */ }
-        function addOption() { /* ... */ }
-        function updateOptionsList() { /* ... */ }
-        function addEditOption() { /* ... */ }
-        function updateEditOptionsList() { /* ... */ }
+        function toggleOptions(type) {
+            const container = document.getElementById('options-container');
+            if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+                currentOptions = [];
+                updateOptionsList();
+            }
+        }
+
+        function toggleEditOptions(type) {
+            const container = document.getElementById('edit-options-container');
+            if (type === 'radio' || type === 'checkbox' || type === 'dropdown') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+                editOptions = [];
+                updateEditOptionsList();
+            }
+        }
+
+        function addOption() {
+            const input = document.getElementById('option-input');
+            const value = (input.value || '').trim();
+            if (!value) return;
+            currentOptions.push(value);
+            input.value = '';
+            updateOptionsList();
+        }
+
+        function updateOptionsList() {
+            const list = document.getElementById('options-list');
+            list.innerHTML = '';
+            currentOptions.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between bg-gray-50 p-2 rounded mb-2';
+                div.innerHTML = `<span class="text-sm text-gray-700">${escapeHtml(opt)}</span><div class="flex items-center"><button type="button" onclick="removeOption(${idx})" class="text-red-500 mr-2">Remove</button></div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function removeOption(idx) {
+            currentOptions.splice(idx, 1);
+            updateOptionsList();
+        }
+
+        function addEditOption() {
+            const input = document.getElementById('edit-option-input');
+            const value = (input.value || '').trim();
+            if (!value) return;
+            editOptions.push(value);
+            input.value = '';
+            updateEditOptionsList();
+        }
+
+        function updateEditOptionsList() {
+            const list = document.getElementById('edit-options-list');
+            list.innerHTML = '';
+            editOptions.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between bg-gray-50 p-2 rounded mb-2';
+                div.innerHTML = `<span class="text-sm text-gray-700">${escapeHtml(opt)}</span><div class="flex items-center"><button type="button" onclick="removeEditOption(${idx})" class="text-red-500 mr-2">Remove</button></div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function removeEditOption(idx) {
+            editOptions.splice(idx, 1);
+            updateEditOptionsList();
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/\"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+        }
         function showShareModal() { document.getElementById('share-modal').classList.remove('hidden'); }
         function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
         function copyToClipboard() { /* ... */ }
