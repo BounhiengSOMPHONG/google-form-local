@@ -318,7 +318,7 @@
                                             </label>
                                             <span id="accepting-label" class="ml-3 text-sm text-gray-700">{{ $form->accepting_responses ? 'Open' : 'Closed' }}</span>
                                             <!-- Test toggle button (visible only to developer) -->
-                                            <button id="accepting-test-toggle" type="button" onclick="testToggleAccepting()" class="ml-4 px-3 py-1 text-xs rounded bg-gray-100 border">Toggle</button>
+                                            <button id="accepting-test-toggle" type="button" onclick="testToggleAccepting()" class="btn-primary px-3 py-1 rounded-lg text-sm ml-4 inline-flex items-center justify-center" aria-label="Toggle accepting responses">Toggle</button>
                                         </div>
                                     </div>
                                 </div>
@@ -649,7 +649,16 @@
             // Optimistic update for label so user sees immediate change
             const acceptingLabel = document.getElementById('accepting-label');
             const checkbox = document.getElementById('accepting-checkbox');
+            const btn = document.getElementById('accepting-test-toggle');
             if (!checkbox) return;
+
+            const origBtnText = btn ? btn.innerText : null;
+            // show loading state on button
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-wait');
+                btn.innerText = 'Updating...';
+            }
 
             const newState = !checkbox.checked;
             if (acceptingLabel) acceptingLabel.textContent = newState ? 'Open' : 'Closed';
@@ -679,6 +688,12 @@
                 console.error(err);
                 if (acceptingLabel) acceptingLabel.textContent = checkbox.checked ? 'Open' : 'Closed';
                 alert('Failed to update accepting status');
+            }).finally(() => {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-wait');
+                    btn.innerText = origBtnText;
+                }
             });
         }
 
