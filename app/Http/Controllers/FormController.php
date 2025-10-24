@@ -97,7 +97,7 @@ class FormController extends Controller
 
         $validated = $request->validate([
             'question_text' => 'required|string',
-            'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date'])],
+            'type' => ['required', Rule::in(['short_text', 'radio', 'checkbox', 'dropdown', 'date', 'lao_radio'])],
             'required' => 'boolean',
             'options' => 'nullable|array',
             'options.*' => 'string',
@@ -106,12 +106,22 @@ class FormController extends Controller
         $highestPosition = $form->questions()->max('position');
         $position = $highestPosition !== null ? $highestPosition + 1 : 1;
 
+        // Predefined Lao radio options (label|value)
+        $laoOptions = [
+            'ດີຫຼາຍ|5',
+            'ດີ|4',
+            'ປານກາງ|3',
+            'ບໍດີ|2',
+            'ບໍດີຫຼາຍ|1',
+        ];
+
         $dataToCreate = [
             'form_id' => $form->id,
             'question_text' => $validated['question_text'],
-            'type' => $validated['type'],
+            // If user selected lao_radio, store as a regular 'radio' question with predefined Lao options
+            'type' => $validated['type'] === 'lao_radio' ? 'radio' : $validated['type'],
             'required' => $request->required ?? false,
-            'options' => ($validated['type'] !== 'short_text' && $validated['type'] !== 'date') ? ($validated['options'] ?? null) : null,
+            'options' => $validated['type'] === 'lao_radio' ? $laoOptions : (($validated['type'] !== 'short_text' && $validated['type'] !== 'date') ? ($validated['options'] ?? null) : null),
             'position' => $position,
         ];
 

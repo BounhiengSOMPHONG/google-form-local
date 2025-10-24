@@ -120,16 +120,24 @@
                                             @elseif($question->type === 'radio')
                                                 <div class="space-y-3">
                                                     @foreach($question->options as $option)
+                                                        @php
+                                                            // Support "label|value" pairs; if no pipe present, use the whole string as both label and value
+                                                            $label = $option;
+                                                            $value = $option;
+                                                            if (is_string($option) && strpos($option, '|') !== false) {
+                                                                [$label, $value] = explode('|', $option, 2);
+                                                            }
+                                                        @endphp
                                                         <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition duration-200">
                                                             <input type="radio" 
                                                                    name="question_{{ $question->id }}" 
                                                                    id="question_{{ $question->id }}_{{ $loop->index }}"
-                                                                   value="{{ $option }}"
-                                                                   {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'checked' : '' }}
+                                                                   value="{{ $value }}"
+                                                                   {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$value ? 'checked' : '' }}
                                                                    class="h-4 w-4 text-yellow-600 focus:ring-yellow-500"
                                                                    @if($question->required) required @endif>
                                                             <label for="question_{{ $question->id }}_{{ $loop->index }}" class="ml-3 block text-gray-700">
-                                                                {{ $option }}
+                                                                {{ $label }}
                                                             </label>
                                                         </div>
                                                     @endforeach

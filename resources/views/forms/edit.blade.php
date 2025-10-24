@@ -76,6 +76,7 @@
                                     <select name="type" id="type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand focus:border-transparent transition duration-200" onchange="toggleOptions(this.value)">
                                         <option value="short_text">Short Text</option>
                                         <option value="radio">Radio Buttons</option>
+                                        <option value="lao_radio">ຄໍາຖາມຄວາມພໍໃຈ (Lao Radio)</option>
                                         <option value="checkbox">Checkboxes</option>
                                         <option value="dropdown">Dropdown</option>
                                         <option value="date">Date</option>
@@ -332,6 +333,7 @@
     </div>
 
     <script>
+        // quickAddLaoRadio removed per user request
         let editOptions = [];
 
         function saveScrollPos() {
