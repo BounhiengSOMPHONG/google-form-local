@@ -1,16 +1,16 @@
 <x-public-layout>
-    <div class="py-6">
+    <div class="py-4">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="container mx-auto px-4 py-8 max-w-3xl">
+            <div class="container mx-auto px-4 py-6 max-w-3xl">
                 @if(session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <div class="card-gradient-alt card-shadow rounded-2xl p-8 mb-4">
+                <div class="card-gradient-alt card-shadow rounded-2xl p-6 mb-4">
                     <!-- Progress Bar -->
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-medium text-gray-700">Progress</span>
                             <span class="text-sm font-medium text-gray-700" id="progress-text">0%</span>
@@ -21,15 +21,15 @@
                     </div>
 
                     <!-- Header -->
-                    <div class="mb-8 text-center">
-                        <div class="inline-block p-3 rounded-full bg-yellow-100 mb-4">
+                    <div class="mb-6 text-center">
+                        <div class="inline-block p-2 rounded-full bg-yellow-100 mb-3">
                             <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-900 mb-3">{{ $form->title }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ $form->title }}</h1>
                         @if($form->description)
-                            <p class="text-gray-600 text-lg">{{ $form->description }}</p>
+                            <p class="text-gray-600">{{ $form->description }}</p>
                         @endif
                     </div>
 
@@ -84,16 +84,16 @@
                             @foreach($sections as $section)
                                 <div class="section-wrapper" id="section-{{ $section['index'] }}" style="{{ $loop->first ? '' : 'display: none;' }}">
                                     <!-- Section Header -->
-                                    <div class="mb-8 pt-6">
-                                        <h2 class="text-2xl font-bold text-gray-800 border-b pb-3">{{ $section['title'] }}</h2>
+                                    <div class="mb-6 pt-4">
+                                        <h2 class="text-xl font-bold text-gray-800 border-b pb-2">{{ $section['title'] }}</h2>
                                         @if($section['description'])
-                                            <p class="text-gray-600 mt-3">{{ $section['description'] }}</p>
+                                            <p class="text-gray-600 mt-2">{{ $section['description'] }}</p>
                                         @endif
                                     </div>
 
                                     <!-- Section Questions -->
                                     @foreach($section['questions'] as $question)
-                                        <div class="mb-8 p-6 bg-white rounded-xl card-shadow transition-all duration-300">
+                                        <div class="mb-6 p-4 bg-white rounded-xl card-shadow transition-all duration-300">
                                             <div class="flex justify-between items-start mb-4">
                                                 <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
                                                     {{ $question->question_text }}
@@ -179,13 +179,13 @@
                                     @endforeach
 
                                     <!-- Navigation buttons for this section -->
-                                    <div class="flex justify-between mt-10">
+                                    <div class="flex justify-between mt-6">
                                         @if($loop->first)
                                             <div></div> <!-- Empty div for alignment -->
                                         @else
-                                            <button type="button" class="btn-secondary px-6 py-3 rounded-xl font-semibold" onclick="showSection({{ $section['index'] - 1 }})">
+                                            <button type="button" class="btn-secondary px-5 py-2.5 rounded-lg font-semibold" onclick="showSection({{ $section['index'] - 1 }})">
                                                 <span class="flex items-center">
-                                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                                     </svg>
                                                     Previous
@@ -194,19 +194,19 @@
                                         @endif
 
                                         @if($loop->last)
-                                            <button type="submit" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
+                                            <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
                                                 <span class="flex items-center">
                                                     Submit Form
-                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                                                     </svg>
                                                 </span>
                                             </button>
                                         @else
-                                            <button type="button" class="btn-primary px-6 py-3 rounded-xl font-semibold" onclick="showSection({{ $section['index'] + 1 }})">
+                                            <button type="button" class="btn-primary px-5 py-2.5 rounded-lg font-semibold" onclick="showSection({{ $section['index'] + 1 }})">
                                                 <span class="flex items-center">
                                                     Next
-                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                     </svg>
                                                 </span>
@@ -219,13 +219,13 @@
                         
                         <!-- Hidden section to show when form is submitted successfully -->
                         <div id="final-section" style="display: none;">
-                            <div class="text-center py-12">
-                                <div class="inline-block p-6 rounded-full bg-green-100 mb-6">
-                                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="text-center py-8">
+                                <div class="inline-block p-4 rounded-full bg-green-100 mb-4">
+                                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h2>
+                                <h2 class="text-xl font-bold text-gray-900 mb-3">Form Submitted Successfully!</h2>
                                 <p class="text-gray-600">Thank you for completing this form.</p>
                             </div>
                         </div>
