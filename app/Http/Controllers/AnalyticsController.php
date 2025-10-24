@@ -18,7 +18,8 @@ class AnalyticsController extends Controller
         
         $questionStats = [];
         
-        foreach ($form->questions as $question) {
+        // Exclude section-type questions from the results dashboard
+        foreach ($form->questions->where('type', '!=', 'section') as $question) {
             $questionStats[$question->id] = $this->calculateQuestionStats($question, $responses);
         }
         

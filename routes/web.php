@@ -6,9 +6,9 @@ use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
 Route::get('/dashboard', [FormController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');

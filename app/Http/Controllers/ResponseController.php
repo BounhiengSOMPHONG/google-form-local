@@ -51,7 +51,20 @@ class ResponseController extends Controller
                     break;
                 case 'radio':
                 case 'dropdown':
-                    $validatedData[$fieldKey] = [$rule, 'string', 'in:' . implode(',', $question->options)];
+                    // Map options to their submitted values: support "label|value" format
+                    $rawOptions = $question->options ?? [];
+                    $allowedValues = array_map(function ($opt) {
+                        if (is_string($opt) && strpos($opt, '|') !== false) {
+                            [$label, $value] = explode('|', $opt, 2);
+                            return $value;
+                        }
+                        return $opt;
+                    }, $rawOptions);
+
+                    $validatedData[$fieldKey] = [$rule, 'string'];
+                    if (!empty($allowedValues)) {
+                        $validatedData[$fieldKey][] = 'in:' . implode(',', $allowedValues);
+                    }
                     break;
                 case 'checkbox':
                     if ($question->required) {
@@ -67,7 +80,16 @@ class ResponseController extends Controller
                             return;
                         }
 
-                        $validOptions = $question->options;
+                        // Support "label|value" option format by validating against the value part
+                        $rawOptions = $question->options ?? [];
+                        $validOptions = array_map(function ($opt) {
+                            if (is_string($opt) && strpos($opt, '|') !== false) {
+                                [$label, $val] = explode('|', $opt, 2);
+                                return $val;
+                            }
+                            return $opt;
+                        }, $rawOptions);
+
                         foreach ($value as $item) {
                             if (!in_array($item, $validOptions)) {
                                 $fail('The selected ' . $attribute . ' is invalid.');
