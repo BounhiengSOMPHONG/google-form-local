@@ -334,6 +334,14 @@
     <script>
         let editOptions = [];
 
+        function saveScrollPos() {
+            try {
+                sessionStorage.setItem('forms_edit_scroll', String(window.scrollY || window.pageYOffset || 0));
+            } catch (e) {
+                // ignore
+            }
+        }
+
         // --- FORM SUBMISSION LOGIC ---
         document.addEventListener('DOMContentLoaded', function() {
             // Handle Edit Form Submission via AJAX
@@ -354,6 +362,9 @@
                     formData.append('options', JSON.stringify(editOptions));
                 }
 
+                // save scroll position before making the request so we can restore after DOM updates
+                saveScrollPos();
+
                 fetch(form.action, {
                     method: 'POST', // Using POST to handle FormData with _method=PUT
                     headers: {
@@ -373,6 +384,11 @@
                     updateDOMItem(updatedItem);
                     closeEditModal();
                     showSuccessToast();
+                // restore scroll position after updating DOM
+                try {
+                    const y = parseInt(sessionStorage.getItem('forms_edit_scroll') || '0', 10);
+                    window.scrollTo(0, isNaN(y) ? 0 : y);
+                } catch (e) {}
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -383,6 +399,8 @@
             // Handle Add Question Form to reload page (as it was originally)
             const addQuestionForm = document.getElementById('add-question-form');
             addQuestionForm.addEventListener('submit', function(e) {
+                // save scroll position before full-page submit
+                saveScrollPos();
                 const optionsInput = document.createElement('input');
                 optionsInput.type = 'hidden';
                 optionsInput.name = 'options';
@@ -497,6 +515,16 @@
                 },
             }).then(() => { location.reload(); }); // Simple reload for adding
         }
+
+        // After full page loads, restore scroll position if present
+        try {
+            const saved = sessionStorage.getItem('forms_edit_scroll');
+            if (saved) {
+                const y = parseInt(saved, 10);
+                if (!isNaN(y)) window.scrollTo(0, y);
+                sessionStorage.removeItem('forms_edit_scroll');
+            }
+        } catch (e) {}
 
         function openEditModal(buttonElem) {
             const id = buttonElem.getAttribute('data-question-id');
