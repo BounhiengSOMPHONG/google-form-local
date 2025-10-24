@@ -284,7 +284,53 @@
                 </div>
 
                 <!-- Share Modal -->
-                <div id="share-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">...</div>
+                <div id="share-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+                    <div class="flex items-center justify-center min-height-screen pt-10 pb-20 px-4">
+                        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl transform transition-all">
+                            <div class="p-6">
+                                <div class="flex justify-between items-center pb-4 border-b">
+                                    <h3 class="text-lg font-bold text-gray-900">Share Form</h3>
+                                    <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-gray-600 mb-4">Anyone with the link can view and submit this form.</p>
+                                    <div class="mb-6">
+                                        <label class="block text-gray-700 text-sm font-medium mb-2">Share Link</label>
+                                        <div class="flex">
+                                            <input type="text" id="share-link" readonly value="{{ route('forms.public', $form) }}" 
+                                                   class="flex-1 px-4 py-3 border border-gray-300 rounded-l-xl focus:ring-2 focus:ring-brand focus:border-transparent">
+                                            <button onclick="copyToClipboard()" class="btn-primary px-6 py-3 rounded-r-xl font-semibold">
+                                                Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-medium mb-2">Accepting Responses</label>
+                                        <div class="flex items-center">
+                                            <label id="accepting-switch" onclick="toggleAccepting()" class="relative inline-flex items-center cursor-pointer w-14 h-8" role="switch" aria-checked="{{ $form->accepting_responses ? 'true' : 'false' }}">
+                                                <input id="accepting-checkbox" type="checkbox" class="sr-only peer" {{ $form->accepting_responses ? 'checked' : '' }}>
+                                                <div class="w-14 h-8 bg-gray-200 rounded-full transition-colors peer-checked:bg-yellow-400"></div>
+                                                <span class="absolute left-1 top-[2px] bg-white border border-gray-300 rounded-full h-7 w-7 transition-transform peer-checked:translate-x-6"></span>
+                                            </label>
+                                            <span id="accepting-label" class="ml-3 text-sm text-gray-700">{{ $form->accepting_responses ? 'Open' : 'Closed' }}</span>
+                                            <!-- Test toggle button (visible only to developer) -->
+                                            <button id="accepting-test-toggle" type="button" onclick="testToggleAccepting()" class="ml-4 px-3 py-1 text-xs rounded bg-gray-100 border">Toggle</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-end mt-6">
+                                    <button onclick="closeShareModal()" class="btn-secondary px-6 py-2 rounded-xl font-medium">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -347,6 +393,47 @@
                 optionsInput.value = JSON.stringify(currentOptions || []);
                 this.appendChild(optionsInput);
             });
+
+            // Handle "Accepting Responses" toggle
+            const acceptingCheckbox = document.getElementById('accepting-checkbox');
+            const acceptingLabel = document.getElementById('accepting-label');
+            if (acceptingCheckbox) {
+                acceptingCheckbox.addEventListener('change', function() {
+                    const isAccepting = this.checked;
+                    const url = "{{ route('forms.setAccepting', $form->id) }}";
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            accepting_responses: isAccepting ? 1 : 0
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            // Revert the checkbox and label on failure
+                            this.checked = !isAccepting;
+                            if (acceptingLabel) acceptingLabel.textContent = !isAccepting ? 'Open' : 'Closed';
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            if (acceptingLabel) acceptingLabel.textContent = isAccepting ? 'Open' : 'Closed';
+                            showSuccessToast(); // Optional: show a success message
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating accepting status:', error);
+                        alert('Failed to update status. Please try again.');
+                    });
+                });
+            }
         });
 
         // --- DOM UPDATE LOGIC ---
@@ -549,6 +636,52 @@
               .replace(/\"/g, "&quot;")
               .replace(/'/g, "&#039;");
         }
+        function toggleAccepting() {
+            const checkbox = document.getElementById('accepting-checkbox');
+            if (!checkbox) return;
+            // Toggle the checkbox state and trigger the existing change handler
+            checkbox.checked = !checkbox.checked;
+            const changeEvent = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvent);
+        }
+
+        function testToggleAccepting() {
+            // Optimistic update for label so user sees immediate change
+            const acceptingLabel = document.getElementById('accepting-label');
+            const checkbox = document.getElementById('accepting-checkbox');
+            if (!checkbox) return;
+
+            const newState = !checkbox.checked;
+            if (acceptingLabel) acceptingLabel.textContent = newState ? 'Open' : 'Closed';
+
+            // Send the same AJAX request as the change handler
+            const url = "{{ route('forms.setAccepting', $form->id) }}";
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ accepting_responses: newState ? 1 : 0 })
+            }).then(res => {
+                if (!res.ok) throw new Error('Network error');
+                return res.json();
+            }).then(data => {
+                if (data.success) {
+                    checkbox.checked = newState;
+                    showSuccessToast();
+                } else {
+                    if (acceptingLabel) acceptingLabel.textContent = checkbox.checked ? 'Open' : 'Closed';
+                    alert('Update failed');
+                }
+            }).catch(err => {
+                console.error(err);
+                if (acceptingLabel) acceptingLabel.textContent = checkbox.checked ? 'Open' : 'Closed';
+                alert('Failed to update accepting status');
+            });
+        }
+
         function showShareModal() { document.getElementById('share-modal').classList.remove('hidden'); }
         function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
         function copyToClipboard() { /* ... */ }
