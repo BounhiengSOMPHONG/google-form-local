@@ -132,7 +132,7 @@
                                                                 {{ $option }}
                                                             </label>
                                                         </div>
-                                                    @endforeach>
+                                                    @endforeach
                                                 </div>
                                             @elseif($question->type === 'checkbox')
                                                 <div class="space-y-3">
@@ -148,7 +148,7 @@
                                                                 {{ $option }}
                                                             </label>
                                                         </div>
-                                                    @endforeach>
+                                                    @endforeach
                                                 </div>
                                             @elseif($question->type === 'dropdown')
                                                 <select name="question_{{ $question->id }}" 
@@ -158,7 +158,7 @@
                                                     <option value="">Select an option</option>
                                                     @foreach($question->options as $option)
                                                         <option value="{{ $option }}" {{ (string)old('question_' . $question->id, $prefill['question_' . $question->id] ?? '') === (string)$option ? 'selected' : '' }}>{{ $option }}</option>
-                                                    @endforeach>
+                                                    @endforeach
                                                 </select>
                                             @elseif($question->type === 'date')
                                                 <input type="date" 
