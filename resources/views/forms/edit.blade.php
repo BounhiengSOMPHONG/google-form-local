@@ -322,11 +322,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex items-center justify-end mt-6">
-                                    <button onclick="closeShareModal()" class="btn-secondary px-6 py-2 rounded-xl font-medium">
-                                        Close
-                                    </button>
-                                </div>
+                                <!-- Close button removed as requested -->
                             </div>
                         </div>
                     </div>
