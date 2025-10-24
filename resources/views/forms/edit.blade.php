@@ -684,6 +684,51 @@
 
         function showShareModal() { document.getElementById('share-modal').classList.remove('hidden'); }
         function closeShareModal() { document.getElementById('share-modal').classList.add('hidden'); }
-        function copyToClipboard() { /* ... */ }
+        function copyToClipboard() {
+            const input = document.getElementById('share-link');
+            if (!input) return;
+
+            const copyButton = document.querySelector('#share-modal button[onclick="copyToClipboard()"]');
+            const originalBtnText = copyButton ? copyButton.innerText : null;
+
+            const setTempText = (text) => {
+                if (!copyButton) return;
+                copyButton.innerText = text;
+                setTimeout(() => { copyButton.innerText = originalBtnText; }, 1500);
+            };
+
+            const value = input.value || input.getAttribute('value') || '';
+
+            // Prefer modern Clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(value).then(() => {
+                    setTempText('Copied');
+                }).catch(() => {
+                    // Fallback
+                    try {
+                        input.select();
+                        input.setSelectionRange(0, 99999);
+                        document.execCommand('copy');
+                        input.blur();
+                        setTempText('Copied');
+                    } catch (err) {
+                        console.error('Copy failed:', err);
+                        alert('Copy failed. Please select the link and press Ctrl+C');
+                    }
+                });
+            } else {
+                // Fallback for older browsers
+                try {
+                    input.select();
+                    input.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    input.blur();
+                    setTempText('Copied');
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                    alert('Copy failed. Please select the link and press Ctrl+C');
+                }
+            }
+        }
     </script>
 </x-app-layout>
