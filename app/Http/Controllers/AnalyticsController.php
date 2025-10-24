@@ -35,12 +35,19 @@ class AnalyticsController extends Controller
             'answers' => [],
         ];
 
-        // Ensure all defined options are present with zero count so unselected
-        // options (e.g. "10") still appear in the results output.
+        // Normalize defined options into value => label so label|value works correctly
         if (in_array($question->type, ['radio', 'checkbox', 'dropdown']) && is_array($question->options)) {
             foreach ($question->options as $opt) {
-                if (!isset($stats['answers'][$opt])) {
-                    $stats['answers'][$opt] = 0;
+                if (is_string($opt) && strpos($opt, '|') !== false) {
+                    [$label, $value] = explode('|', $opt, 2);
+                } else {
+                    $label = $opt;
+                    $value = $opt;
+                }
+
+                $stats['display_options'][$value] = $label;
+                if (!isset($stats['answers'][$value])) {
+                    $stats['answers'][$value] = 0;
                 }
             }
         }
@@ -53,7 +60,7 @@ class AnalyticsController extends Controller
                     if ($question->type === 'checkbox') {
                         // For checkbox, answer is stored as JSON
                         $selectedOptions = json_decode($answer->answer, true) ?: [];
-                        
+
                         foreach ($selectedOptions as $option) {
                             if (!isset($stats['answers'][$option])) {
                                 $stats['answers'][$option] = 0;
@@ -62,10 +69,12 @@ class AnalyticsController extends Controller
                         }
                     } else {
                         // For radio, dropdown, short_text, date
-                        if (!isset($stats['answers'][$answer->answer])) {
-                            $stats['answers'][$answer->answer] = 0;
+                        $val = $answer->answer;
+                        if (!isset($stats['answers'][$val])) {
+                            // If we have display_options mapping, ensure key exists
+                            $stats['answers'][$val] = 0;
                         }
-                        $stats['answers'][$answer->answer]++;
+                        $stats['answers'][$val]++;
                     }
                 }
             }

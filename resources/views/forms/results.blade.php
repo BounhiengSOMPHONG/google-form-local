@@ -164,16 +164,38 @@
                             
                             <div class="mt-4 space-y-2 max-h-32 overflow-y-auto">
                                 @php
-                                    $displayOptions = is_array($stats['question']->options) ? $stats['question']->options : array_keys($stats['answers']);
                                     $colors = ['#FFD500', '#FFA500', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DFE6E9', '#74B9FF', '#A29BFE'];
+
+                                    // If controller provided display_options mapping (value => label), use it.
+                                    // Otherwise, try to normalize question->options that may be in "label|value" form.
+                                    if (!empty($stats['display_options']) && is_array($stats['display_options'])) {
+                                        $optionKeys = array_keys($stats['display_options']); // stored values
+                                        $optionLabels = array_values($stats['display_options']); // shown labels
+                                    } elseif (is_array($stats['question']->options)) {
+                                        $optionKeys = [];
+                                        $optionLabels = [];
+                                        foreach ($stats['question']->options as $opt) {
+                                            if (is_string($opt) && strpos($opt, '|') !== false) {
+                                                [$label, $value] = explode('|', $opt, 2);
+                                            } else {
+                                                $label = $opt;
+                                                $value = $opt;
+                                            }
+                                            $optionKeys[] = $value;
+                                            $optionLabels[] = $label;
+                                        }
+                                    } else {
+                                        $optionKeys = array_keys($stats['answers']);
+                                        $optionLabels = $optionKeys;
+                                    }
                                 @endphp
 
-                                @foreach($displayOptions as $index => $option)
-                                    @php $data = $stats['answers'][$option] ?? ['count' => 0, 'percentage' => 0]; @endphp
+                                @foreach($optionKeys as $index => $key)
+                                    @php $label = $optionLabels[$index] ?? $key; $data = $stats['answers'][$key] ?? ['count' => 0, 'percentage' => 0]; @endphp
                                     <div class="flex items-center justify-between text-sm">
                                         <div class="flex items-center flex-1 min-w-0">
                                             <span class="w-3 h-3 rounded-full mr-2 flex-shrink-0" style="background-color: {{ $colors[$index % count($colors)] }};"></span>
-                                            <span class="text-gray-700 truncate">{{ $option }}</span>
+                                            <span class="text-gray-700 truncate">{{ $label }}</span>
                                         </div>
                                         <span class="font-semibold text-gray-800 ml-2 whitespace-nowrap">{{ $data['count'] }} ({{ $data['percentage'] }}%)</span>
                                     </div>
@@ -187,14 +209,14 @@
                                         new Chart(ctx, {
                                             type: 'pie',
                                             data: {
-                                                labels: {!! json_encode($displayOptions) !!},
+                                                labels: {!! json_encode($optionLabels ?? []) !!},
                                                 datasets: [{
                                                     data: [
-                                                        @foreach($displayOptions as $option)
-                                                            {{ $stats['answers'][$option]['count'] ?? 0 }},
+                                                        @foreach($optionKeys as $key)
+                                                            {{ $stats['answers'][$key]['count'] ?? 0 }},
                                                         @endforeach
                                                     ],
-                                                    backgroundColor: {!! json_encode(array_slice($colors, 0, count($displayOptions))) !!},
+                                                    backgroundColor: {!! json_encode(array_slice($colors, 0, count($optionKeys ?? []))) !!},
                                                     borderWidth: 3,
                                                     borderColor: '#ffffff'
                                                 }]
