@@ -408,6 +408,14 @@
                 this.appendChild(optionsInput);
             });
 
+            // Attach saveScrollPos to any forms that perform DELETE via _method so page doesn't jump on reload
+            document.querySelectorAll('form').forEach(function(f) {
+                const methodInput = f.querySelector('input[name="_method"]');
+                if (methodInput && methodInput.value && methodInput.value.toUpperCase() === 'DELETE') {
+                    f.addEventListener('submit', function() { saveScrollPos(); });
+                }
+            });
+
             // Handle "Accepting Responses" toggle
             const acceptingCheckbox = document.getElementById('accepting-checkbox');
             const acceptingLabel = document.getElementById('accepting-label');
