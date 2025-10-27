@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -164,6 +166,52 @@
   .dashboard-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
+}
+
+/* Font utility classes for Noto Sans Lao */
+.font-lao-thin {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 100;
+}
+
+.font-lao-extralight {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 200;
+}
+
+.font-lao-light {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 300;
+}
+
+.font-lao-regular {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 400;
+}
+
+.font-lao-medium {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 500;
+}
+
+.font-lao-semibold {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 600;
+}
+
+.font-lao-bold {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 700;
+}
+
+.font-lao-extrabold {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 800;
+}
+
+.font-lao-black {
+  font-family: "Noto Sans Lao", sans-serif;
+  font-weight: 900;
 }
 
 /* Keep red and green semantics untouched */
