@@ -27,7 +27,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ $form->title }}</h1>
+                        <h1 class="text-2xl font-normal text-gray-900 mb-2">{{ $form->title }}</h1>
                         @if($form->description)
                             <p class="text-gray-600">{{ $form->description }}</p>
                         @endif
@@ -85,7 +85,7 @@
                                 <div class="section-wrapper" id="section-{{ $section['index'] }}" style="{{ $loop->first ? '' : 'display: none;' }}">
                                     <!-- Section Header -->
                                     <div class="mb-6 pt-4">
-                                        <h2 class="text-xl font-bold text-gray-800 border-b pb-2">{{ $section['title'] }}</h2>
+                                        <h2 class="text-xl font-normal text-gray-800 border-b pb-2">{{ $section['title'] }}</h2>
                                         @if($section['description'])
                                             <p class="text-gray-600 mt-2">{{ $section['description'] }}</p>
                                         @endif
@@ -95,7 +95,7 @@
                                     @foreach($section['questions'] as $question)
                                         <div class="mb-6 p-4 bg-white rounded-xl card-shadow transition-all duration-300">
                                             <div class="flex justify-between items-start mb-4">
-                                                <label class="block text-gray-800 text-lg font-semibold" for="question_{{ $question->id }}">
+                                                <label class="block text-gray-800 text-lg font-normal" for="question_{{ $question->id }}">
                                                     {{ $question->question_text }}
                                                     @if($question->required)
                                                         <span class="text-red-500">*</span>
@@ -183,7 +183,7 @@
                                         @if($loop->first)
                                             <div></div> <!-- Empty div for alignment -->
                                         @else
-                                            <button type="button" class="btn-secondary px-5 py-2.5 rounded-lg font-semibold" onclick="showSection({{ $section['index'] - 1 }})">
+                                            <button type="button" class="btn-secondary px-5 py-2.5 rounded-lg font-normal" onclick="showSection({{ $section['index'] - 1 }})">
                                                 <span class="flex items-center">
                                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -194,7 +194,7 @@
                                         @endif
 
                                         @if($loop->last)
-                                            <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
+                                            <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-normal shadow-lg transform transition duration-300 hover:scale-105" {{ ! $form->accepting_responses ? 'disabled' : '' }}>
                                                 <span class="flex items-center">
                                                     Submit Form
                                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +203,7 @@
                                                 </span>
                                             </button>
                                         @else
-                                            <button type="button" class="btn-primary px-5 py-2.5 rounded-lg font-semibold" onclick="showSection({{ $section['index'] + 1 }})">
+                                            <button type="button" class="btn-primary px-5 py-2.5 rounded-lg font-normal" onclick="showSection({{ $section['index'] + 1 }})">
                                                 <span class="flex items-center">
                                                     Next
                                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,7 +225,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 </div>
-                                <h2 class="text-xl font-bold text-gray-900 mb-3">Form Submitted Successfully!</h2>
+                                <h2 class="text-xl font-normal text-gray-900 mb-3">Form Submitted Successfully!</h2>
                                 <p class="text-gray-600">Thank you for completing this form.</p>
                             </div>
                         </div>
